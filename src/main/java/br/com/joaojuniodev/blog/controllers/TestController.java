@@ -28,7 +28,17 @@ public class TestController {
 
         for (int i = 1; i < 6; i++) {
             User user2 = new User((long) i + 2, "email123UserNovo@gmail.com", "123456", "Maria Fernanda " + i, true, true, true, true, false);
-            Comment comment = new Comment((long) i, "Content " + i, user2, null);
+            Comment comment = new Comment((long) i, "Comment" + i, user2, null);
+
+            if (i == 2) {
+                comment.setContent("Que lixo essa bosta fdp");
+            }
+
+            if (comment.getId() == 2) {
+               var commentRespost = new Comment(13L, "Fodasse voce seu inútil kkkk", user1, comment);
+               post1.addComment(commentRespost);
+            }
+
             post1.addComment(comment);
         }
 
