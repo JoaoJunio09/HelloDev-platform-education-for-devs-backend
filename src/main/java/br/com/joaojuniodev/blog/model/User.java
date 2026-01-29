@@ -1,5 +1,7 @@
 package br.com.joaojuniodev.blog.model;
 
+import java.security.Permission;
+import java.util.List;
 import java.util.Objects;
 
 public class User {
@@ -13,6 +15,7 @@ public class User {
     private Boolean credentialsNonExpired;
     private Boolean enabled;
     private Boolean admin;
+    private List<Permission> permissions;
 
     public User() {}
 
@@ -99,6 +102,22 @@ public class User {
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     @Override
