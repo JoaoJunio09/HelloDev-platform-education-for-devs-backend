@@ -1,5 +1,6 @@
 package br.com.joaojuniodev.blog.controllers;
 
+import br.com.joaojuniodev.blog.data.dto.model.PersonDTO;
 import br.com.joaojuniodev.blog.model.Person;
 import br.com.joaojuniodev.blog.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PersonController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_YAML_VALUE })
-    public ResponseEntity<List<Person>> findAll() {
+    public ResponseEntity<List<PersonDTO>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
     }
 }
