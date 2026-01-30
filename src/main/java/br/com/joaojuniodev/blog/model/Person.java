@@ -25,19 +25,14 @@ public class Person {
     @Column(nullable = false)
     private String phone;
 
-    @JoinColumn(name = "user_id")
-    @OneToOne
-    private User user;
-
     public Person() {}
 
-    public Person(Long id, String firstName, String lastName, LocalDate birthDate, String phone, User user) {
+    public Person(Long id, String firstName, String lastName, LocalDate birthDate, String phone) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.phone = phone;
-        this.user = user;
     }
 
     public Long getId() {
@@ -78,14 +73,6 @@ public class Person {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override

@@ -1,30 +1,27 @@
 package br.com.joaojuniodev.blog.data.dto.model;
 
 import br.com.joaojuniodev.blog.model.Person;
-import br.com.joaojuniodev.blog.model.User;
-import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class PersonDTO {
+public class PersonDTO extends RepresentationModel<PersonDTO> {
 
     private Long id;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
     private String phone;
-    private Long userId;
 
     public PersonDTO() {}
 
-    public PersonDTO(Long id, String firstName, String lastName, LocalDate birthDate, String phone, Long userId) {
+    public PersonDTO(Long id, String firstName, String lastName, LocalDate birthDate, String phone) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.phone = phone;
-        this.userId = userId;
     }
 
     public Long getId() {
@@ -67,20 +64,12 @@ public class PersonDTO {
         this.phone = phone;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         PersonDTO personDTO = (PersonDTO) o;
-        return Objects.equals(getId(), personDTO.getId()) && Objects.equals(getFirstName(), personDTO.getFirstName()) && Objects.equals(getLastName(), personDTO.getLastName()) && Objects.equals(getBirthDate(), personDTO.getBirthDate()) && Objects.equals(getPhone(), personDTO.getPhone()) && Objects.equals(getUserId(), personDTO.getUserId());
+        return Objects.equals(getId(), personDTO.getId()) && Objects.equals(getFirstName(), personDTO.getFirstName()) && Objects.equals(getLastName(), personDTO.getLastName()) && Objects.equals(getBirthDate(), personDTO.getBirthDate()) && Objects.equals(getPhone(), personDTO.getPhone());
     }
 
     @Override
@@ -90,7 +79,6 @@ public class PersonDTO {
         result = 31 * result + Objects.hashCode(getLastName());
         result = 31 * result + Objects.hashCode(getBirthDate());
         result = 31 * result + Objects.hashCode(getPhone());
-        result = 31 * result + Objects.hashCode(getUserId());
         return result;
     }
 }

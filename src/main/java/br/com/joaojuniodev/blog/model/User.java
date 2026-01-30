@@ -48,9 +48,6 @@ public class User implements UserDetails {
     private List<Permission> permissions;
 
     @OneToOne(mappedBy = "user")
-    private Person person;
-
-    @OneToOne(mappedBy = "user")
     private List<Post> posts;
 
     @OneToOne(mappedBy = "user")
@@ -166,15 +163,6 @@ public class User implements UserDetails {
 
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
-    }
-
-    @JsonIgnore
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
     }
 
     public List<Post> getPosts() {
