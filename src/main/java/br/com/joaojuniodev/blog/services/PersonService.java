@@ -2,6 +2,7 @@ package br.com.joaojuniodev.blog.services;
 
 import br.com.joaojuniodev.blog.controllers.PersonController;
 import br.com.joaojuniodev.blog.data.dto.model.PersonDTO;
+import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.repositories.PersonRepository;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static br.com.joaojuniodev.blog.mapper.ObjectConvertManually.convertPersonDtoToEntity;
@@ -38,30 +40,46 @@ public class PersonService implements IService<PersonDTO> {
 
     @Override
     public PersonDTO findById(Long id) {
-        return null;
+
+        logger.info("Finding a one Person");
+
+        var entity = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Not found this ID : " + id));
+        return addHateoas(convertPersonEntityToDto(entity));
     }
 
     @Override
     public PersonDTO create(PersonDTO person) {
+
         logger.info("Creating a one Person");
 
-        if (person == null) {
-            throw new ObjectIsNullException("The Object is null");
-        }
+        if (person == null) throw new ObjectIsNullException("The Object is null");
 
         return addHateoas(convertPersonEntityToDto(
-            repository.save(convertPersonDtoToEntity(person))
-        ));
+            repository.save(convertPersonDtoToEntity(person))));
     }
 
     @Override
     public PersonDTO update(PersonDTO person) {
-        return null;
+
+        logger.info("Updating a exists Person");
+
+        var entity = repository.findById(person.getId())
+                .orElseThrow(() -> new NotFoundException("Not found this ID:" + person.getId()));
+        entity.setFirstName(person.getFirstName());
+        entity.setLastName(person.getLastName());
+        entity.setBirthDate(person.getBirthDate());
+        entity.setPhone(person.getPhone());
+        return addHateoas(convertPersonEntityToDto(repository.save(entity)));
     }
 
     @Override
     public void delete(Long id) {
+        logger.info("Deleting a one Person");
 
+        var entity = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Not found this ID:" + id));
+        repository.delete(entity);
     }
 
     private PersonDTO addHateoas(PersonDTO dto) {
