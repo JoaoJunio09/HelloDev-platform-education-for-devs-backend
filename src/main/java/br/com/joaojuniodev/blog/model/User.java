@@ -1,25 +1,57 @@
 package br.com.joaojuniodev.blog.model;
 
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
-public class User {
+@Entity
+public class User implements UserDetails {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String email;
+
+    @Column
+    private String username;
+
+    @Column
     private String password;
+
+    @Column
     private String fullName;
+
+    @Column(name = "account_non_expired")
     private Boolean accountNonExpired;
+
+    @Column(name = "account_non_locked")
     private Boolean accountNonLocked;
+
+    @Column(name = "credentials_non_expired")
     private Boolean credentialsNonExpired;
+
+    @Column
     private Boolean enabled;
+
+    @Column
     private Boolean admin;
+
+    @ManyToMany
+    @JoinTable(name = "user_permission",
+        joinColumns = {@JoinColumn(name = "user")},
+        inverseJoinColumns = {@JoinColumn(name = "permission")})
+    private List<Permission> permissions;
 
     public User() {}
 
-    public User(Long id, String email, String password, String fullName, Boolean accountNonExpired,
+    public User(Long id, String username, String password, String fullName, Boolean accountNonExpired,
         Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, Boolean admin) {
         this.id = id;
-        this.email = email;
+        this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.accountNonExpired = accountNonExpired;
@@ -27,6 +59,24 @@ public class User {
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
         this.admin = admin;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.permissions;
+    }
+
+    public List<String> getRoles() {
+        List<String> roles = new ArrayList<>();
+        for (Permission permission : permissions) {
+            roles.add(permission.getDescription());
+        }
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
     }
 
     public Long getId() {
@@ -37,12 +87,8 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -51,14 +97,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getfullName() {
-        return fullName;
-    }
-
-    public void setfullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public Boolean getAccountNonExpired() {
@@ -101,20 +139,36 @@ public class User {
         this.admin = admin;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getfullName(), user.getfullName()) && Objects.equals(getAccountNonExpired(), user.getAccountNonExpired()) && Objects.equals(getAccountNonLocked(), user.getAccountNonLocked()) && Objects.equals(getCredentialsNonExpired(), user.getCredentialsNonExpired()) && Objects.equals(getEnabled(), user.getEnabled()) && Objects.equals(getAdmin(), user.getAdmin());
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getFullName(), user.getFullName()) && Objects.equals(getAccountNonExpired(), user.getAccountNonExpired()) && Objects.equals(getAccountNonLocked(), user.getAccountNonLocked()) && Objects.equals(getCredentialsNonExpired(), user.getCredentialsNonExpired()) && Objects.equals(getEnabled(), user.getEnabled()) && Objects.equals(getAdmin(), user.getAdmin());
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hashCode(getId());
-        result = 31 * result + Objects.hashCode(getEmail());
+        result = 31 * result + Objects.hashCode(getUsername());
         result = 31 * result + Objects.hashCode(getPassword());
-        result = 31 * result + Objects.hashCode(getfullName());
+        result = 31 * result + Objects.hashCode(getFullName());
         result = 31 * result + Objects.hashCode(getAccountNonExpired());
         result = 31 * result + Objects.hashCode(getAccountNonLocked());
         result = 31 * result + Objects.hashCode(getCredentialsNonExpired());

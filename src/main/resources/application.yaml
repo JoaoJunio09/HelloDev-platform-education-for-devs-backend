@@ -13,3 +13,10 @@ spring:
       hibernate:
     show-sql: false
     open-in-view: false
+  security:
+    jwt:
+      secret-key: 57cr37
+      expire-length: 3600000
+logging:
+  level:
+    org.springframework.web.cors: ERROR
