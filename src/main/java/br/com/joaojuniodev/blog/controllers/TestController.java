@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/blog/test")
+@RequestMapping("/api/blog/v1")
 public class TestController {
 
     String firstName = "Lucas";
@@ -58,7 +58,7 @@ public class TestController {
     }
 
     private UserDTO convertUserEntityToDto(User entity) {
-        return new UserDTO(entity.getfullName(), entity.getEmail());
+        return new UserDTO(entity.getFullName(), entity.getUsername());
     }
 
     private List<CommentDTO> convertCommentListEntityToDto(List<Comment> entities) {
