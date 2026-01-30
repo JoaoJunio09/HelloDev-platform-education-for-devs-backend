@@ -47,14 +47,14 @@ public class User implements UserDetails {
         inverseJoinColumns = {@JoinColumn(name = "permission")})
     private List<Permission> permissions;
 
-    @OneToOne(mappedBy = "user")
-    private List<Post> posts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user")
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Like> likes;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
 
     public User() {}
 

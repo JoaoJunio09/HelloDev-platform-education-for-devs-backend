@@ -1,11 +1,11 @@
 package br.com.joaojuniodev.blog.controllers;
 
 import br.com.joaojuniodev.blog.data.dto.security.AccountCredentialsDTO;
+import br.com.joaojuniodev.blog.mediatype.MediaTypes;
 import br.com.joaojuniodev.blog.services.AuthService;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,13 +39,13 @@ public class AuthController {
     @PostMapping(
         value = "/createUser",
         produces = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_YAML_VALUE },
+            MediaTypes.APPLICATION_JSON,
+            MediaTypes.APPLICATION_XML,
+            MediaTypes.APPLICATION_YAML },
         consumes = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_YAML_VALUE }
+            MediaTypes.APPLICATION_JSON,
+            MediaTypes.APPLICATION_XML,
+            MediaTypes.APPLICATION_YAML }
     )
     public AccountCredentialsDTO create(@RequestBody AccountCredentialsDTO credentials) {
         return service.create(credentials);
@@ -60,5 +60,4 @@ public class AuthController {
             StringUtils.isBlank(credentials.getUsername()) ||
             StringUtils.isBlank(credentials.getPassword());
     }
-
 }
