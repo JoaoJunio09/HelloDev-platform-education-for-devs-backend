@@ -1,19 +1,40 @@
 package br.com.joaojuniodev.blog.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table
 public class Post {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(name = "sub_title", nullable = false)
     private String subTitle;
+
+    @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
     private LocalDate date;
+
+    @JoinColumn(name = "user_id")
+    @ManyToOne
     private User user;
+
+    @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post")
     private List<Like> likes = new ArrayList<>();
     
     public Post() {}

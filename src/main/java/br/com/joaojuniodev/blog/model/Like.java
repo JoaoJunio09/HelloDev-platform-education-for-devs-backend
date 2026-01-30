@@ -1,23 +1,35 @@
 package br.com.joaojuniodev.blog.model;
 
-import br.com.joaojuniodev.blog.model.enums.LikeTargetType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "likes")
 public class Like {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne
     private User user;
-    private LikeTargetType targetType;
-    private Long targetId;
+
+    @ManyToOne
+    private Post post;
+
+    @ManyToOne
+    private Comment comment;
 
     public Like() {}
 
-    public Like(Long id, User user, LikeTargetType targetType, Long targetId) {
+    public Like(Long id, User user, Post post, Comment comment) {
         this.id = id;
         this.user = user;
-        this.targetType = targetType;
-        this.targetId = targetId;
+        this.post = post;
+        this.comment = comment;
     }
 
     public Long getId() {
@@ -36,20 +48,22 @@ public class Like {
         this.user = user;
     }
 
-    public LikeTargetType getTargetType() {
-        return targetType;
+    @JsonIgnore
+    public Post getPost() {
+        return post;
     }
 
-    public void setTargetType(LikeTargetType targetType) {
-        this.targetType = targetType;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public Long getTargetId() {
-        return targetId;
+    @JsonIgnore
+    public Comment getComment() {
+        return comment;
     }
 
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 
     @Override

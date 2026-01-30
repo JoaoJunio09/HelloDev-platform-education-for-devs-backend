@@ -1,15 +1,32 @@
 package br.com.joaojuniodev.blog.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
+@Table
 public class Person {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
     private LocalDate birthDate;
+
+    @Column(nullable = false)
     private String phone;
+
+    @JoinColumn(name = "user_id")
+    @OneToOne
     private User user;
 
     public Person() {}

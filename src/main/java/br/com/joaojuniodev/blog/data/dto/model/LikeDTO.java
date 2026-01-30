@@ -1,7 +1,4 @@
-package br.com.joaojuniodev.blog.data.dto;
-
-import br.com.joaojuniodev.blog.model.User;
-import br.com.joaojuniodev.blog.model.enums.LikeTargetType;
+package br.com.joaojuniodev.blog.data.dto.model;
 
 import java.util.Objects;
 
@@ -9,16 +6,13 @@ public class LikeDTO {
 
     private Long id;
     private UserDTO user;
-    private LikeTargetType targetType;
-    private Long targetId;
+    private Long postId;
+    private Long commentId;
 
     public LikeDTO() {}
 
-    public LikeDTO(Long id, UserDTO user, LikeTargetType targetType, Long targetId) {
+    public LikeDTO(Long id) {
         this.id = id;
-        this.user = user;
-        this.targetType = targetType;
-        this.targetId = targetId;
     }
 
     public Long getId() {
@@ -37,20 +31,20 @@ public class LikeDTO {
         this.user = user;
     }
 
-    public LikeTargetType getTargetType() {
-        return targetType;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setTargetType(LikeTargetType targetType) {
-        this.targetType = targetType;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
-    public Long getTargetId() {
-        return targetId;
+    public Long getCommentId() {
+        return commentId;
     }
 
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
+    public void setCommentId(Long commentId) {
+        this.commentId = commentId;
     }
 
     @Override

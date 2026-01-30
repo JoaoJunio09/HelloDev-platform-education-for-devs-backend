@@ -1,6 +1,6 @@
 package br.com.joaojuniodev.blog.controllers;
 
-import br.com.joaojuniodev.blog.data.dto.*;
+import br.com.joaojuniodev.blog.data.dto.model.*;
 import br.com.joaojuniodev.blog.model.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +17,7 @@ public class TestController {
     String firstName = "Lucas";
     String lastName = "Almeida";
 
+    /*
     @GetMapping
     public PostDTO test() {
 
@@ -90,5 +91,5 @@ public class TestController {
     private ParentCommentDTO convertCommentEntityToParentCommentDto(Comment entity) {
         if (entity == null) return null;
         return new ParentCommentDTO(entity.getId(), entity.getContent());
-    }
+    }*/
 }

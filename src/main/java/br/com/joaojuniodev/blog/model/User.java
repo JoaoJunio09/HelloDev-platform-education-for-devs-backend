@@ -1,15 +1,12 @@
 package br.com.joaojuniodev.blog.model;
 
-<<<<<<< HEAD
-import java.security.Permission;
-=======
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
->>>>>>> developer
 import java.util.List;
 import java.util.Objects;
 
@@ -43,13 +40,24 @@ public class User implements UserDetails {
 
     @Column
     private Boolean admin;
-    private List<Permission> permissions;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_permission",
         joinColumns = {@JoinColumn(name = "user")},
         inverseJoinColumns = {@JoinColumn(name = "permission")})
     private List<Permission> permissions;
+
+    @OneToOne(mappedBy = "user")
+    private Person person;
+
+    @OneToOne(mappedBy = "user")
+    private List<Post> posts;
+
+    @OneToOne(mappedBy = "user")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes;
 
     public User() {}
 
@@ -158,6 +166,40 @@ public class User implements UserDetails {
 
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    @JsonIgnore
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @JsonIgnore
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
     }
 
     @Override

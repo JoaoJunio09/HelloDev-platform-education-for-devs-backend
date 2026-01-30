@@ -1,4 +1,4 @@
-package br.com.joaojuniodev.blog.data.dto;
+package br.com.joaojuniodev.blog.data.dto.model;
 
 public class UserDTO {
 
