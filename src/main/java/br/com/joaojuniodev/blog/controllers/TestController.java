@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/blog/v1")
+@RequestMapping("/api/blog/v1")
 public class TestController {
 
     String firstName = "Lucas";

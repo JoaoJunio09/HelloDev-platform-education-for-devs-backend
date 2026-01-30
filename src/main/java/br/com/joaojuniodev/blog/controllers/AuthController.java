@@ -22,7 +22,7 @@ public class AuthController {
         var token = service.signIn(credentials);
 
         if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
-        return token;
+        return ResponseEntity.ok().body(token);
     }
 
     @PutMapping("/refresh/{username}")

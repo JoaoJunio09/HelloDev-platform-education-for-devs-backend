@@ -40,7 +40,7 @@ public class User implements UserDetails {
     @Column
     private Boolean admin;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_permission",
         joinColumns = {@JoinColumn(name = "user")},
         inverseJoinColumns = {@JoinColumn(name = "permission")})

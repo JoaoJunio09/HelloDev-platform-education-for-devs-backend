@@ -34,7 +34,7 @@ public class AuthService {
     @Autowired
     UserRepository repository;
 
-    public ResponseEntity<TokenDTO> signIn(AccountCredentialsDTO credentials) {
+    public TokenDTO signIn(AccountCredentialsDTO credentials) {
         logger.info("Performing the login");
 
         authenticationManager.authenticate(
@@ -53,10 +53,10 @@ public class AuthService {
             credentials.getUsername(),
             user.getRoles()
         );
-        return ResponseEntity.ok(token);
+        return token;
     }
 
-    public ResponseEntity<TokenDTO> refreshToken(String username, String refreshToken) {
+    public TokenDTO refreshToken(String username, String refreshToken) {
         var user = repository.findByUsername(username);
         TokenDTO token;
         if (user != null) {
@@ -65,7 +65,7 @@ public class AuthService {
             throw new RuntimeException();
         }
 
-        return ResponseEntity.ok(token);
+        return token;
     }
 
     public AccountCredentialsDTO create(AccountCredentialsDTO user) {
