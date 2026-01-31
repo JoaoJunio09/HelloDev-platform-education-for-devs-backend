@@ -1,24 +1,28 @@
 package br.com.joaojuniodev.blog.data.dto.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.hateoas.RepresentationModel;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PostDTO {
+public class PostDTO extends RepresentationModel<PostDTO> {
 
     private Long id;
     private String title;
     private String subTitle;
     private String content;
-    private LocalDate date;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private String date;
     private Long userId;
     private List<CommentDTO> comments = new ArrayList<>();
     private List<LikeDTO> likes = new ArrayList<>();
 
     public PostDTO() {}
 
-    public PostDTO(Long id, String title, String subTitle, String content, LocalDate date, Long userId, List<CommentDTO> comments, List<LikeDTO> likes) {
+    public PostDTO(Long id, String title, String subTitle, String content, String date, Long userId, List<CommentDTO> comments, List<LikeDTO> likes) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
@@ -61,11 +65,11 @@ public class PostDTO {
         this.content = content;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

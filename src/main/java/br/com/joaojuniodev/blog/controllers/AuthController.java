@@ -1,22 +1,26 @@
 package br.com.joaojuniodev.blog.controllers;
 
+import br.com.joaojuniodev.blog.controllers.docs.AuthControllerDocs;
 import br.com.joaojuniodev.blog.data.dto.security.AccountCredentialsDTO;
 import br.com.joaojuniodev.blog.mediatype.MediaTypes;
 import br.com.joaojuniodev.blog.services.AuthService;
 import io.micrometer.common.util.StringUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Auth")
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthControllerDocs {
 
     @Autowired
     private AuthService service;
 
     @PostMapping("/sign")
+    @Override
     public ResponseEntity<?> signIn(@RequestBody AccountCredentialsDTO credentials) {
         if (credentialsIsInvalid(credentials)) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
         var token = service.signIn(credentials);
@@ -26,6 +30,7 @@ public class AuthController {
     }
 
     @PutMapping("/refresh/{username}")
+    @Override
     public ResponseEntity<?> refreshToken(
         @PathVariable("username") String username,
         @RequestHeader("Authorization") String refreshToken
@@ -47,6 +52,7 @@ public class AuthController {
             MediaTypes.APPLICATION_XML,
             MediaTypes.APPLICATION_YAML }
     )
+    @Override
     public AccountCredentialsDTO create(@RequestBody AccountCredentialsDTO credentials) {
         return service.create(credentials);
     }

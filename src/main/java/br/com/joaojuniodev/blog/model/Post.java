@@ -1,5 +1,6 @@
 package br.com.joaojuniodev.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

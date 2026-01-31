@@ -1,9 +1,9 @@
 package br.com.joaojuniodev.blog.controllers;
 
-import br.com.joaojuniodev.blog.controllers.docs.PostControllerDocs;
-import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
+import br.com.joaojuniodev.blog.controllers.docs.CommentControllerDocs;
+import br.com.joaojuniodev.blog.data.dto.model.CommentDTO;
 import br.com.joaojuniodev.blog.mediatype.MediaTypes;
-import br.com.joaojuniodev.blog.services.PostService;
+import br.com.joaojuniodev.blog.services.CommentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Post")
+@Tag(name = "Comment")
 @RestController
-@RequestMapping("/api/post/v1")
-public class PostController implements PostControllerDocs {
+@RequestMapping("/api/comment/v1")
+public class CommentController implements CommentControllerDocs {
 
     @Autowired
-    private PostService service;
+    private CommentService service;
 
     @GetMapping(
         produces = {
@@ -25,7 +25,7 @@ public class PostController implements PostControllerDocs {
             MediaTypes.APPLICATION_XML,
             MediaTypes.APPLICATION_YAML })
     @Override
-    public ResponseEntity<List<PostDTO>> findAll() {
+    public ResponseEntity<List<CommentDTO>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
     }
 
@@ -36,7 +36,7 @@ public class PostController implements PostControllerDocs {
             MediaTypes.APPLICATION_XML,
             MediaTypes.APPLICATION_YAML })
     @Override
-    public ResponseEntity<PostDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<CommentDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
@@ -50,8 +50,8 @@ public class PostController implements PostControllerDocs {
             MediaTypes.APPLICATION_XML,
             MediaTypes.APPLICATION_YAML })
     @Override
-    public ResponseEntity<PostDTO> create(@RequestBody PostDTO PostDTO) {
-        return ResponseEntity.ok().body(service.create(PostDTO));
+    public ResponseEntity<CommentDTO> create(@RequestBody CommentDTO comment) {
+        return ResponseEntity.ok().body(service.create(comment));
     }
 
     @PutMapping(
@@ -62,10 +62,10 @@ public class PostController implements PostControllerDocs {
         produces = {
             MediaTypes.APPLICATION_JSON,
             MediaTypes.APPLICATION_XML,
-            MediaTypes.APPLICATION_YAML })
+            MediaTypes.APPLICATION_YAML})
     @Override
-    public ResponseEntity<PostDTO> update(@RequestBody PostDTO PostDTO) {
-        return ResponseEntity.ok().body(service.update(PostDTO));
+    public ResponseEntity<CommentDTO> update(@RequestBody CommentDTO comment) {
+        return ResponseEntity.ok().body(service.update(comment));
     }
 
     @DeleteMapping(value = "/{id}")

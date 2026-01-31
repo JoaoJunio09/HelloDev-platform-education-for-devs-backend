@@ -1,9 +1,11 @@
 package br.com.joaojuniodev.blog.data.dto.model;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.util.List;
 import java.util.Objects;
 
-public class CommentDTO {
+public class CommentDTO extends RepresentationModel<CommentDTO> {
 
     private Long id;
     private String content;

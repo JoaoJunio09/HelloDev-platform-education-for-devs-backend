@@ -13,9 +13,9 @@ public class OpenApiConfig {
     OpenAPI customApiConfig() {
         return new OpenAPI()
             .info(new Info()
-                .title("REST API's RESTful by TaskHub Management Premium with Java, Spring, Docker and Kubernetes")
+                .title("REST API's RESTful by Blog Application with Java, Spring, Docker and Kubernetes")
                 .version("1.0")
-                .description("REST API's RESTful by TaskHub Management Premium with Java, Spring, Docker and Kubernetes")
+                .description("REST API's RESTful by Blog Application with Java, Spring, Docker and Kubernetes")
                 .termsOfService("https://joaojunio-dev.vercel.app")
                 .license(new License()
                     .name("Apache 2.0")
