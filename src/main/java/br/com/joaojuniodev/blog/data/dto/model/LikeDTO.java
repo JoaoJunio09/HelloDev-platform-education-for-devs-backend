@@ -1,8 +1,10 @@
 package br.com.joaojuniodev.blog.data.dto.model;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.util.Objects;
 
-public class LikeDTO {
+public class LikeDTO extends RepresentationModel<LikeDTO> {
 
     private Long id;
     private UserDTO user;
