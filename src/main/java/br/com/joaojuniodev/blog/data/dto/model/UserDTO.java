@@ -3,13 +3,13 @@ package br.com.joaojuniodev.blog.data.dto.model;
 public class UserDTO {
 
     private String fullName;
-    private String email;
+    private String username;
 
     public UserDTO() {}
 
-    public UserDTO(String fullName, String email) {
+    public UserDTO(String fullName, String username) {
         this.fullName = fullName;
-        this.email = email;
+        this.username = username;
     }
 
     public String getFullName() {
@@ -20,11 +20,11 @@ public class UserDTO {
         this.fullName = fullName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

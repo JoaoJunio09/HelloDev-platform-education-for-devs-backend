@@ -4,6 +4,7 @@ import br.com.joaojuniodev.blog.controllers.PersonController;
 import br.com.joaojuniodev.blog.data.dto.model.PersonDTO;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
+import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.repositories.PersonRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import org.slf4j.Logger;
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static br.com.joaojuniodev.blog.mapper.ObjectConvertManually.convertPersonDtoToEntity;
-import static br.com.joaojuniodev.blog.mapper.ObjectConvertManually.convertPersonEntityToDto;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -26,13 +25,16 @@ public class PersonService implements IService<PersonDTO> {
     @Autowired
     PersonRepository repository;
 
+    @Autowired
+    ObjectConvertManually mapper;
+
     public List<PersonDTO> findAll() {
 
         logger.info("Finding all People");
 
         return repository.findAll()
             .stream()
-            .map(entity -> addHateoas(convertPersonEntityToDto(entity)))
+            .map(entity -> addHateoas(mapper.convertPersonEntityToDto(entity)))
             .toList();
     }
 
@@ -43,7 +45,7 @@ public class PersonService implements IService<PersonDTO> {
 
         var entity = repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Not found this ID : " + id));
-        return addHateoas(convertPersonEntityToDto(entity));
+        return addHateoas(mapper.convertPersonEntityToDto(entity));
     }
 
     @Override
@@ -53,8 +55,8 @@ public class PersonService implements IService<PersonDTO> {
 
         if (person == null) throw new ObjectIsNullException("The Object is null");
 
-        return addHateoas(convertPersonEntityToDto(
-            repository.save(convertPersonDtoToEntity(person))));
+        return addHateoas(mapper.convertPersonEntityToDto(
+            repository.save(mapper.convertPersonDtoToEntity(person))));
     }
 
     @Override
@@ -68,7 +70,7 @@ public class PersonService implements IService<PersonDTO> {
         entity.setLastName(person.getLastName());
         entity.setBirthDate(person.getBirthDate());
         entity.setPhone(person.getPhone());
-        return addHateoas(convertPersonEntityToDto(repository.save(entity)));
+        return addHateoas(mapper.convertPersonEntityToDto(repository.save(entity)));
     }
 
     @Override

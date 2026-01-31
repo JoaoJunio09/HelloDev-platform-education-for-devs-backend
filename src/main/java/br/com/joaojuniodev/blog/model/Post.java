@@ -47,6 +47,17 @@ public class Post {
         this.date = date;
     }
 
+    public Post(Long id, String title, String subTitle, String content, LocalDate date, User user, List<Comment> comments, List<Like> likes) {
+        this.id = id;
+        this.title = title;
+        this.subTitle = subTitle;
+        this.content = content;
+        this.date = date;
+        this.user = user;
+        this.comments = comments;
+        this.likes = likes;
+    }
+
     public Long getId() {
         return id;
     }

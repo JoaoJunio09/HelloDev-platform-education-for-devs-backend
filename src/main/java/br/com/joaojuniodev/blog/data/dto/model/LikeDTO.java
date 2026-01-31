@@ -11,8 +11,11 @@ public class LikeDTO {
 
     public LikeDTO() {}
 
-    public LikeDTO(Long id) {
+    public LikeDTO(Long id, UserDTO user, Long postId, Long commentId) {
         this.id = id;
+        this.user = user;
+        this.postId = postId;
+        this.commentId = commentId;
     }
 
     public Long getId() {

@@ -41,6 +41,15 @@ public class Comment {
         this.id = id;
     }
 
+    public Comment(Long id, String content, User user, Post post, List<Like> likes, Comment parent) {
+        this.id = id;
+        this.content = content;
+        this.user = user;
+        this.post = post;
+        this.likes = likes;
+        this.parent = parent;
+    }
+
     public Long getId() {
         return id;
     }
@@ -59,6 +68,14 @@ public class Comment {
 
     public User getUser() {
         return user;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public void setUser(User user) {

@@ -12,19 +12,19 @@ public class PostDTO {
     private String subTitle;
     private String content;
     private LocalDate date;
-    private UserDTO user;
+    private Long userId;
     private List<CommentDTO> comments = new ArrayList<>();
     private List<LikeDTO> likes = new ArrayList<>();
 
     public PostDTO() {}
 
-    public PostDTO(Long id, String title, String subTitle, String content, LocalDate date, UserDTO user, List<CommentDTO> comments, List<LikeDTO> likes) {
+    public PostDTO(Long id, String title, String subTitle, String content, LocalDate date, Long userId, List<CommentDTO> comments, List<LikeDTO> likes) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.content = content;
         this.date = date;
-        this.user = user;
+        this.userId = userId;
         this.comments = comments;
         this.likes = likes;
     }
@@ -69,12 +69,12 @@ public class PostDTO {
         this.date = date;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public List<CommentDTO> getComments() {

@@ -8,15 +8,17 @@ public class CommentDTO {
     private Long id;
     private String content;
     private UserDTO user;
+    private Long postId;
     private List<LikeDTO> likes;
     private ParentCommentDTO parent;
 
     public CommentDTO() {}
 
-    public CommentDTO(Long id, String content, UserDTO user, List<LikeDTO> likes, ParentCommentDTO parent) {
+    public CommentDTO(Long id, String content, UserDTO user, Long postId, List<LikeDTO> likes, ParentCommentDTO parent) {
         this.id = id;
         this.content = content;
         this.user = user;
+        this.postId = postId;
         this.likes = likes;
         this.parent = parent;
     }
@@ -43,6 +45,14 @@ public class CommentDTO {
 
     public void setUser(UserDTO user) {
         this.user = user;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public List<LikeDTO> getLikes() {
