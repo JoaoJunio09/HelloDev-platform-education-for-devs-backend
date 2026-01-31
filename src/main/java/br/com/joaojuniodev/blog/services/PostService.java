@@ -5,13 +5,15 @@ import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
+import br.com.joaojuniodev.blog.model.Comment;
+import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
+@Transactional
 public class PostService implements IService<PostDTO> {
 
     private final Logger logger = LoggerFactory.getLogger(PostService.class.getName());
@@ -30,6 +33,7 @@ public class PostService implements IService<PostDTO> {
     @Autowired
     ObjectConvertManually mapper;
 
+    @Transactional
     @Override
     public List<PostDTO> findAll() {
 
@@ -46,7 +50,7 @@ public class PostService implements IService<PostDTO> {
 
         logger.info("Finding a one Post");
 
-        var entity = repository.findById(id)
+        var entity = repository.findByIdWithComments(id)
                 .orElseThrow(() -> new NotFoundException("Not found this ID : " + id));
         return addHateoas(mapper.convertPostEntityToDto(entity));
     }

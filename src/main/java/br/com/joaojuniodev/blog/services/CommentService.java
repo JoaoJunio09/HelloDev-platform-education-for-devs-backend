@@ -5,7 +5,9 @@ import br.com.joaojuniodev.blog.data.dto.model.CommentDTO;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
+import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.repositories.CommentRepository;
+import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,9 @@ public class CommentService implements IService<CommentDTO> {
 
     @Autowired
     CommentRepository repository;
+
+    @Autowired
+    PostRepository postRepository;
 
     @Autowired
     ObjectConvertManually mapper;
@@ -56,8 +61,13 @@ public class CommentService implements IService<CommentDTO> {
 
         if (comment == null) throw new ObjectIsNullException("The Object [Comment] is null");
 
-        return addHateoas(mapper.convertCommentEntityToDto(
-            repository.save(mapper.convertCommentDtoToEntity(comment))));
+        var entity = mapper.convertCommentDtoToEntity(comment);
+        var post = postRepository.findById(entity.getPost().getId())
+            .orElseThrow(() -> new NotFoundException("Not found this ID:" + entity.getPost().getId()));
+        entity.setPost(post);
+        var dto = mapper.convertCommentEntityToDto(repository.save(entity));
+
+        return addHateoas(dto);
     }
 
     @Override

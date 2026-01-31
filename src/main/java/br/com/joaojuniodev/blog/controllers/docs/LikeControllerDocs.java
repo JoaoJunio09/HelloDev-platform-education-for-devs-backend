@@ -12,8 +12,8 @@ public interface LikeControllerDocs {
 
     @Operation(
         tags = {"Like"},
-        summary = "Find by one Like",
-        description = "Find by one Like",
+        summary = "Finds a Like's",
+        description = "Finds a Like's",
         responses = {
             @ApiResponse(description = "Success", responseCode = "200", content = @Content),
             @ApiResponse(description = "Bad Request", responseCode = "200", content = @Content),
@@ -42,8 +42,8 @@ public interface LikeControllerDocs {
 
     @Operation(
         tags = {"Like"},
-        summary = "Find by one Like",
-        description = "Find by one Like",
+        summary = "Create a new Like",
+        description = "Create a new Like",
         responses = {
             @ApiResponse(description = "Success", responseCode = "200", content = @Content),
             @ApiResponse(description = "Bad Request", responseCode = "200", content = @Content),
@@ -57,8 +57,8 @@ public interface LikeControllerDocs {
 
     @Operation(
         tags = {"Like"},
-        summary = "Find by one Like",
-        description = "Find by one Like",
+        summary = "Update a Like",
+        description = "Update a Like",
         responses = {
             @ApiResponse(description = "Success", responseCode = "200", content = @Content),
             @ApiResponse(description = "Bad Request", responseCode = "200", content = @Content),
@@ -72,8 +72,8 @@ public interface LikeControllerDocs {
 
     @Operation(
         tags = {"Like"},
-        summary = "Find by one Like",
-        description = "Find by one Like",
+        summary = "Delete a one Like",
+        description = "Delete a one Like",
         responses = {
             @ApiResponse(description = "Success", responseCode = "200", content = @Content),
             @ApiResponse(description = "Bad Request", responseCode = "200", content = @Content),

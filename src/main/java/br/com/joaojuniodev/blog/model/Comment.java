@@ -34,11 +34,12 @@ public class Comment {
 
     public Comment() {}
 
-    public Comment(Long id, String content, User user, Comment parent) {
-        this.parent = parent;
-        this.user = user;
-        this.content = content;
+    public Comment(Long id, String content, Post post, User user, Comment parent) {
         this.id = id;
+        this.content = content;
+        this.post = post;
+        this.user = user;
+        this.parent = parent;
     }
 
     public Comment(Long id, String content, User user, Post post, List<Like> likes, Comment parent) {

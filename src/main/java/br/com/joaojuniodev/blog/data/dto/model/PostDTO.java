@@ -17,8 +17,8 @@ public class PostDTO extends RepresentationModel<PostDTO> {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String date;
     private Long userId;
-    private List<CommentDTO> comments = new ArrayList<>();
-    private List<LikeDTO> likes = new ArrayList<>();
+    private List<CommentDTO> comments;
+    private List<LikeDTO> likes;
 
     public PostDTO() {}
 

@@ -7,15 +7,18 @@ import br.com.joaojuniodev.blog.repositories.CommentRepository;
 import br.com.joaojuniodev.blog.repositories.LikeRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class ObjectConvertManually {
+
+    private final Logger logger = LoggerFactory.getLogger(ObjectConvertManually.class.getName());
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
@@ -89,13 +92,13 @@ public class ObjectConvertManually {
 
     public Comment convertCommentDtoToEntity(CommentDTO dto) {
         var post = postRepository.findById(dto.getPostId()).orElseThrow();
+
         return new Comment(
             dto.getId(),
             dto.getContent(),
-            convertUserDtoToEntity(dto.getUser()),
             post,
-            convertLikeListDtoToEntity(dto.getLikes()),
-            convertParentCommentDtoToEntity(dto.getParent())
+            convertUserDtoToEntity(dto.getUser()),
+            dto.getParent() == null ? null : convertParentCommentDtoToEntity(dto.getParent())
         );
     }
 
@@ -103,26 +106,30 @@ public class ObjectConvertManually {
         return new CommentDTO(
             entity.getId(),
             entity.getContent(),
-            convertUserEntityToDto(entity.getUser()), entity.getPost().getId(),
+            convertUserEntityToDto(entity.getUser()),
+            entity.getPost().getId(),
             convertLikeListEntityToDto(entity.getLikes()),
             convertCommentToParentCommentDto(entity.getParent())
         );
     }
 
     public ParentCommentDTO convertCommentToParentCommentDto(Comment comment) {
+        if (comment == null) return null;
         return new ParentCommentDTO(comment.getId(), comment.getContent());
     }
 
     public List<Comment> convertCommentListDtoToEntity(List<CommentDTO> dtos) {
-        List<Comment> entities = new ArrayList<>();
-        dtos.stream().map(dto -> convertCommentDtoToEntity(dto));
-        return entities;
+        if (dtos == null) return List.of();
+        return dtos.stream()
+            .map(this::convertCommentDtoToEntity)
+            .toList();
     }
 
-    public List<CommentDTO> convertCommentListEntityToDto(List<Comment> entity) {
-        List<CommentDTO> dtos = new ArrayList<>();
-        dtos.stream().map(dto -> convertCommentDtoToEntity(dto));
-        return dtos;
+    public List<CommentDTO> convertCommentListEntityToDto(List<Comment> entities) {
+       if (entities == null) return List.of();
+       return entities.stream()
+           .map(this::convertCommentEntityToDto)
+           .toList();
     }
 
     public Like convertLikeDtoToEntity(LikeDTO dto) {
@@ -139,18 +146,24 @@ public class ObjectConvertManually {
     }
 
     public List<Like> convertLikeListDtoToEntity(List<LikeDTO> dtos) {
-        List<Like> entities = new ArrayList<>();
-        dtos.stream().map(dto -> entities.add(convertLikeDtoToEntity(dto)));
-        return entities;
+        if (dtos == null) return List.of();
+        return dtos.stream()
+            .map(this::convertLikeDtoToEntity)
+            .toList();
     }
 
     public List<LikeDTO> convertLikeListEntityToDto(List<Like> entities) {
-        List<LikeDTO> dtos = new ArrayList<>();
-        entities.stream().map(entity -> dtos.add(convertLikeEntityToDto(entity)));
-        return dtos;
+        if (entities == null) return List.of();
+        return entities.stream()
+            .map(this::convertLikeEntityToDto)
+            .toList();
     }
 
     public Comment convertParentCommentDtoToEntity(ParentCommentDTO dto) {
        return commentRepository.findById(dto.getId()).orElseThrow();
+    }
+
+    public List<Post> convertPostListDtoToEntity(List<PostDTO> dtos) {
+        return dtos.stream().map(this::convertPostDtoToEntity).toList();
     }
 }

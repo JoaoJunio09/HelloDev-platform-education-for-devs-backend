@@ -12,8 +12,8 @@ public interface CommentControllerDocs {
 
     @Operation(
         tags = {"Comment"},
-        summary = "Find by one Comment",
-        description = "Find by one Comment",
+        summary = "Finds all Comment's",
+        description = "Find by one Comment's",
         responses = {
             @ApiResponse(description = "Success", responseCode = "200", content = @Content),
             @ApiResponse(description = "Bad Request", responseCode = "200", content = @Content),
@@ -42,8 +42,8 @@ public interface CommentControllerDocs {
 
     @Operation(
         tags = {"Comment"},
-        summary = "Find by one Comment",
-        description = "Find by one Comment",
+        summary = "Create Comment",
+        description = "Create Comment",
         responses = {
             @ApiResponse(description = "Success", responseCode = "200", content = @Content),
             @ApiResponse(description = "Bad Request", responseCode = "200", content = @Content),
@@ -57,8 +57,8 @@ public interface CommentControllerDocs {
 
     @Operation(
         tags = {"Comment"},
-        summary = "Find by one Comment",
-        description = "Find by one Comment",
+        summary = "Update a Comment",
+        description = "Update a Comment",
         responses = {
             @ApiResponse(description = "Success", responseCode = "200", content = @Content),
             @ApiResponse(description = "Bad Request", responseCode = "200", content = @Content),
@@ -72,8 +72,8 @@ public interface CommentControllerDocs {
 
     @Operation(
         tags = {"Comment"},
-        summary = "Find by one Comment",
-        description = "Find by one Comment",
+        summary = "Delete a Comment",
+        description = "Delete a Comment",
         responses = {
             @ApiResponse(description = "Success", responseCode = "200", content = @Content),
             @ApiResponse(description = "Bad Request", responseCode = "200", content = @Content),

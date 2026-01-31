@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "like")
+@Tag(name = "Like")
 @RestController
 @RequestMapping("/api/like/v1")
 public class LikeController implements LikeControllerDocs {
@@ -62,7 +62,7 @@ public class LikeController implements LikeControllerDocs {
         produces = {
             MediaTypes.APPLICATION_JSON,
             MediaTypes.APPLICATION_XML,
-            MediaTypes.APPLICATION_YAML})
+            MediaTypes.APPLICATION_YAML })
     @Override
     public ResponseEntity<LikeDTO> update(@RequestBody LikeDTO like) {
         return ResponseEntity.ok().body(service.update(like));
