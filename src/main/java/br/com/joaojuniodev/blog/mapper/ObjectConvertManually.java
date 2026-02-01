@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -133,16 +132,20 @@ public class ObjectConvertManually {
     }
 
     public Like convertLikeDtoToEntity(LikeDTO dto) {
-        var post = postRepository.findById(dto.getPostId()).orElseThrow();
-        var comment = commentRepository.findById(dto.getCommentId()).orElseThrow();
+        Post post = dto.getPostId() != null
+            ? postRepository.findById(dto.getPostId()).orElseThrow()
+            : null;
+        Comment comment = dto.getCommentId() != null
+            ? commentRepository.findById(dto.getCommentId()).orElseThrow()
+            : null;
         return new Like(dto.getId(), convertUserDtoToEntity(dto.getUser()), post, comment);
     }
     public LikeDTO convertLikeEntityToDto(Like entity) {
         return new LikeDTO(
             entity.getId(),
             convertUserEntityToDto(entity.getUser()),
-            entity.getPost().getId(),
-            entity.getComment().getId());
+            entity.getPost() == null ? null : entity.getPost().getId(),
+            entity.getComment() == null ? null :entity.getComment().getId());
     }
 
     public List<Like> convertLikeListDtoToEntity(List<LikeDTO> dtos) {

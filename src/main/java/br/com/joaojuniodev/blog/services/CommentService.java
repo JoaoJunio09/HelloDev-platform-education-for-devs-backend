@@ -5,7 +5,6 @@ import br.com.joaojuniodev.blog.data.dto.model.CommentDTO;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
-import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.repositories.CommentRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
@@ -13,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
+@Transactional
 public class CommentService implements IService<CommentDTO> {
 
     private final Logger logger = LoggerFactory.getLogger(CommentService.class.getName());
@@ -83,6 +84,7 @@ public class CommentService implements IService<CommentDTO> {
 
     @Override
     public void delete(Long id) {
+
         logger.info("Deleting a one Comment");
 
         var entity = repository.findById(id)

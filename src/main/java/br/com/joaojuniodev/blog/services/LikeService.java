@@ -5,7 +5,9 @@ import br.com.joaojuniodev.blog.data.dto.model.LikeDTO;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
+import br.com.joaojuniodev.blog.repositories.CommentRepository;
 import br.com.joaojuniodev.blog.repositories.LikeRepository;
+import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,12 @@ public class LikeService implements IService<LikeDTO> {
 
     @Autowired
     LikeRepository repository;
+
+    @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
 
     @Autowired
     ObjectConvertManually mapper;
@@ -55,7 +63,6 @@ public class LikeService implements IService<LikeDTO> {
         logger.info("Creating a one Like");
 
         if (like == null) throw new ObjectIsNullException("The Object [Like] is null");
-
         return addHateoas(mapper.convertLikeEntityToDto(
             repository.save(mapper.convertLikeDtoToEntity(like))));
     }
