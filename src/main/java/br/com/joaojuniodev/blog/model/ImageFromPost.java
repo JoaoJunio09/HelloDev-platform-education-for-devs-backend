@@ -13,7 +13,8 @@ public class ImageFromPost {
     @Column
     private String fileId;
 
-    @ManyToOne
+    @JoinColumn(name = "post_id")
+    @OneToOne
     private Post post;
 
     public ImageFromPost() {}

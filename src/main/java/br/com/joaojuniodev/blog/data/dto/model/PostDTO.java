@@ -1,5 +1,6 @@
 package br.com.joaojuniodev.blog.data.dto.model;
 
+import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -16,19 +17,19 @@ public class PostDTO extends RepresentationModel<PostDTO> {
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String date;
-    private Long userId;
+    private UserDTO userDTO;
     private List<CommentDTO> comments;
     private List<LikeDTO> likes;
 
     public PostDTO() {}
 
-    public PostDTO(Long id, String title, String subTitle, String content, String date, Long userId, List<CommentDTO> comments, List<LikeDTO> likes) {
+    public PostDTO(Long id, String title, String subTitle, String content, String date, UserDTO userDTO, List<CommentDTO> comments, List<LikeDTO> likes) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.content = content;
         this.date = date;
-        this.userId = userId;
+        this.userDTO = userDTO;
         this.comments = comments;
         this.likes = likes;
     }
@@ -73,12 +74,12 @@ public class PostDTO extends RepresentationModel<PostDTO> {
         this.date = date;
     }
 
-    public Long getUserId() {
-        return userId;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
     public List<CommentDTO> getComments() {

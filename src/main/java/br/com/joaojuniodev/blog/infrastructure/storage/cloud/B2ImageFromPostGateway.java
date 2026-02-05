@@ -16,6 +16,7 @@ import com.backblaze.b2.client.structures.B2FileVersion;
 import com.backblaze.b2.client.structures.B2UploadFileRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,10 @@ public class B2ImageFromPostGateway implements IImageFromPost {
 
     private final Logger logger = LoggerFactory.getLogger(B2ImageFromPostGateway.class.getName());
 
+    @Autowired
     private B2StorageClient client;
+
+    @Autowired
     private B2Properties props;
 
     @Override

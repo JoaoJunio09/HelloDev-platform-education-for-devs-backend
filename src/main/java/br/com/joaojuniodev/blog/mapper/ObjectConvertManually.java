@@ -52,7 +52,7 @@ public class ObjectConvertManually {
     public Post convertPostDtoToEntity(PostDTO dto) {
         User user = null;
         try {
-            user = userRepository.findById(dto.getUserId()).orElseThrow();
+            user = userRepository.findByUsername(dto.getUserDTO().getUsername());
         } catch (Exception e) {
             throw new NotFoundException("User not found");
         }
@@ -75,7 +75,7 @@ public class ObjectConvertManually {
             entity.getSubTitle(),
             entity.getContent(),
             entity.getDate().toString(),
-            entity.getUser().getId(),
+            convertUserEntityToDto(entity.getUser()),
             convertCommentListEntityToDto(entity.getComments()),
             convertLikeListEntityToDto(entity.getLikes())
         );

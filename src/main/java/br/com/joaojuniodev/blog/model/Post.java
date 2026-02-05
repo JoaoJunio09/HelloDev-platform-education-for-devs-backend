@@ -31,8 +31,8 @@ public class Post {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "post")
-    private List<ImageFromPost> imagesFromPost;
+    @OneToOne(mappedBy = "post")
+    private ImageFromPost imagesFromPost;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();

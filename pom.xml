@@ -83,6 +83,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.backblaze.b2</groupId>
+			<artifactId>b2-sdk-core</artifactId>
+			<version>${backblaze.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.backblaze.b2</groupId>
 			<artifactId>b2-sdk-httpclient</artifactId>
 			<version>${backblaze.version}</version>
 		</dependency>

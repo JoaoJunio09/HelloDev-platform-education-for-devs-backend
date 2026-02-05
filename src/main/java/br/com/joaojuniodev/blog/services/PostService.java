@@ -1,6 +1,7 @@
 package br.com.joaojuniodev.blog.services;
 
 import br.com.joaojuniodev.blog.controllers.PostController;
+import br.com.joaojuniodev.blog.data.dto.model.PersonDTO;
 import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.exceptions.ErrorSavingEntityException;
@@ -14,6 +15,8 @@ import br.com.joaojuniodev.blog.model.ImageFromPost;
 import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.core.util.ObjectMapperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +77,7 @@ public class PostService implements IService<PostDTO> {
         logger.info("Creating a one Post");
 
         if (post == null) throw new ObjectIsNullException("The Object [Post] is null");
+        if (post.getUserDTO() == null) throw new ObjectIsNullException("The Object [UserDTO] is null");
         if (post.getDate() == null) post.setDate(LocalDate.now().toString());
 
         var entity = repository.save(mapper.convertPostDtoToEntity(post));
