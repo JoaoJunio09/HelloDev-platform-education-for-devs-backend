@@ -1,3 +1,5 @@
+cors:
+  originPatterns: http://localhost:5500,https://joaojunio-dev.vercel.app,
 spring:
   application:
     name: blog

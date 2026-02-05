@@ -13,7 +13,7 @@ import java.util.List;
 
 @Tag(name = "Post")
 @RestController
-@RequestMapping("/api/post/v1")
+@RequestMapping("/api/posts/v1")
 public class PostController implements PostControllerDocs {
 
     @Autowired

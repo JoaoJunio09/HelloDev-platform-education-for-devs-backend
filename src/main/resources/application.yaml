@@ -1,3 +1,5 @@
+cors:
+  originPatterns: http://localhost:5500,https://joaojunio-dev.vercel.app,
 spring:
   application:
     name: blog
@@ -17,6 +19,11 @@ spring:
     jwt:
       secret-key: 57cr37
       expire-length: 3600000
+b2:
+  keyId: 005df139ad1f5050000000005
+  applicationKey: K005JR7B50bjIjEH/oa7/5tBIXDafXo
+  bucketName: hellodev-blog
+  userAgent: hellodev-blog/0.0.1
 logging:
   level:
     org.springframework.web.cors: ERROR
