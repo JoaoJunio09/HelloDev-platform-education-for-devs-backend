@@ -6,7 +6,7 @@ import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
 import br.com.joaojuniodev.blog.exceptions.storage.ErrorReadingFilenameException;
 import br.com.joaojuniodev.blog.exceptions.storage.ErrorUploadingToB2Exception;
 import br.com.joaojuniodev.blog.exceptions.storage.ItWasNotPossibleToObtainImageInB2Exception;
-import br.com.joaojuniodev.blog.infrastructure.storage.cloud.contract.IBannerImagesFromPost;
+import br.com.joaojuniodev.blog.infrastructure.storage.cloud.contract.IImageFromPost;
 import com.backblaze.b2.client.B2StorageClient;
 import com.backblaze.b2.client.contentHandlers.B2ContentSink;
 import com.backblaze.b2.client.contentSources.B2ByteArrayContentSource;
@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Component
-public class B2BannerImageFromPost implements IBannerImagesFromPost {
+public class B2ImageFromPostGateway implements IImageFromPost {
 
-    private final Logger logger = LoggerFactory.getLogger(B2BannerImageFromPost.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(B2ImageFromPostGateway.class.getName());
 
     private B2StorageClient client;
     private B2Properties props;

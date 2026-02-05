@@ -2,9 +2,16 @@ package br.com.joaojuniodev.blog.services;
 
 import br.com.joaojuniodev.blog.controllers.PostController;
 import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
+import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
+import br.com.joaojuniodev.blog.exceptions.ErrorSavingEntityException;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
+import br.com.joaojuniodev.blog.exceptions.storage.ErrorUploadingToB2Exception;
+import br.com.joaojuniodev.blog.exceptions.storage.FileInvalidFormatException;
+import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
+import br.com.joaojuniodev.blog.model.ImageFromPost;
+import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import org.slf4j.Logger;
@@ -12,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,10 +35,16 @@ public class PostService implements IService<PostDTO> {
     private final Logger logger = LoggerFactory.getLogger(PostService.class.getName());
 
     @Autowired
+    ObjectConvertManually mapper;
+
+    @Autowired
     PostRepository repository;
 
     @Autowired
-    ObjectConvertManually mapper;
+    ImageFromPostRepository imageFromPostRepository;
+
+    @Autowired
+    private B2ImageFromPostGateway b2ImageFromPostGateway;
 
     @Transactional
     @Override
@@ -65,6 +80,19 @@ public class PostService implements IService<PostDTO> {
         return addHateoas(mapper.convertPostEntityToDto(entity));
     }
 
+    public StoredFileResponse uploadImageFromPost(MultipartFile image, Long postId) {
+        if (image == null) throw new ErrorUploadingToB2Exception("The upload could not be completed because the image is null.");
+        if (!validityTypeOfContent(image)) throw new FileInvalidFormatException("No other file formats are accepted besides -> jpeg and png");
+
+        StoredFileResponse response = b2ImageFromPostGateway.uploadImage(image);
+
+        var post = repository.findById(postId)
+            .orElseThrow(() -> new NotFoundException("Not found this ID : " + postId));
+        logger.info("Saving image metadata in the database");
+        imageFromPostRepository.save(new ImageFromPost(null, response.getFileId(), post));
+        return response;
+    }
+
     @Override
     public PostDTO update(PostDTO post) {
 
@@ -85,6 +113,11 @@ public class PostService implements IService<PostDTO> {
         var entity = repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Not found this ID:" + id));
         repository.delete(entity);
+    }
+
+    public boolean validityTypeOfContent(MultipartFile image) {
+        return image.getContentType().equalsIgnoreCase("image/jpeg") ||
+            image.getContentType().equalsIgnoreCase("image/png");
     }
 
     private PostDTO addHateoas(PostDTO dto) {

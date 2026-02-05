@@ -1,11 +1,9 @@
 package br.com.joaojuniodev.blog.exceptions.handler;
 
-import br.com.joaojuniodev.blog.exceptions.ExceptionResponse;
-import br.com.joaojuniodev.blog.exceptions.InvalidJwtAuthenticationException;
-import br.com.joaojuniodev.blog.exceptions.NotFoundException;
-import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
+import br.com.joaojuniodev.blog.exceptions.*;
 import br.com.joaojuniodev.blog.exceptions.storage.ErrorReadingFilenameException;
 import br.com.joaojuniodev.blog.exceptions.storage.ErrorUploadingToB2Exception;
+import br.com.joaojuniodev.blog.exceptions.storage.FileInvalidFormatException;
 import br.com.joaojuniodev.blog.exceptions.storage.ItWasNotPossibleToObtainImageInB2Exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,10 +81,30 @@ public class CustomizedExceptionHandler {
     @ExceptionHandler(ErrorReadingFilenameException.class)
     public ResponseEntity<ExceptionResponse> errorReadingFilenameExceptionHandler(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
-                ex.getMessage(),
-                request.getDescription(true),
-                new Date()
+            ex.getMessage(),
+            request.getDescription(true),
+            new Date()
         );
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(FileInvalidFormatException.class)
+    public ResponseEntity<ExceptionResponse> fileInvalidFormatExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            ex.getMessage(),
+            request.getDescription(true),
+            new Date()
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler(ErrorSavingEntityException.class)
+    public ResponseEntity<ExceptionResponse> errorSavingEntityExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            ex.getMessage(),
+            request.getDescription(true),
+            new Date()
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }
