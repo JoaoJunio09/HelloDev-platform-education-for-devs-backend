@@ -5,8 +5,6 @@ import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
-import br.com.joaojuniodev.blog.model.Comment;
-import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import org.slf4j.Logger;
@@ -51,7 +49,7 @@ public class PostService implements IService<PostDTO> {
         logger.info("Finding a one Post");
 
         var entity = repository.findByIdWithComments(id)
-                .orElseThrow(() -> new NotFoundException("Not found this ID : " + id));
+            .orElseThrow(() -> new NotFoundException("Not found this ID : " + id));
         return addHateoas(mapper.convertPostEntityToDto(entity));
     }
 

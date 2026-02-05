@@ -4,7 +4,9 @@ import br.com.joaojuniodev.blog.exceptions.ExceptionResponse;
 import br.com.joaojuniodev.blog.exceptions.InvalidJwtAuthenticationException;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import br.com.joaojuniodev.blog.exceptions.storage.ErrorReadingFilenameException;
+import br.com.joaojuniodev.blog.exceptions.storage.ErrorUploadingToB2Exception;
+import br.com.joaojuniodev.blog.exceptions.storage.ItWasNotPossibleToObtainImageInB2Exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -56,5 +58,35 @@ public class CustomizedExceptionHandler {
             new Date()
         );
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ErrorUploadingToB2Exception.class)
+    public ResponseEntity<ExceptionResponse> errorUploadingToB2ExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            ex.getMessage(),
+            request.getDescription(true),
+            new Date()
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ItWasNotPossibleToObtainImageInB2Exception.class)
+    public ResponseEntity<ExceptionResponse> itImpossibleToObtainImageInB2ExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            ex.getMessage(),
+            request.getDescription(true),
+            new Date()
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ErrorReadingFilenameException.class)
+    public ResponseEntity<ExceptionResponse> errorReadingFilenameExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                ex.getMessage(),
+                request.getDescription(true),
+                new Date()
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 }

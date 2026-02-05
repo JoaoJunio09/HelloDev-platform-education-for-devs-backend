@@ -1,6 +1,5 @@
 package br.com.joaojuniodev.blog.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -31,6 +30,9 @@ public class Post {
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
+
+    @OneToMany(mappedBy = "post")
+    private List<ImageFromPost> imagesFromPost;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
