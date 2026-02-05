@@ -7,8 +7,10 @@ import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.exceptions.ErrorSavingEntityException;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
+import br.com.joaojuniodev.blog.exceptions.storage.ErrorGettingFromB2Exception;
 import br.com.joaojuniodev.blog.exceptions.storage.ErrorUploadingToB2Exception;
 import br.com.joaojuniodev.blog.exceptions.storage.FileInvalidFormatException;
+import br.com.joaojuniodev.blog.exceptions.storage.InvalidFileIdException;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.model.ImageFromPost;
@@ -17,13 +19,14 @@ import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.core.util.ObjectMapperFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -85,6 +88,9 @@ public class PostService implements IService<PostDTO> {
     }
 
     public StoredFileResponse uploadImageFromPost(MultipartFile image, Long postId) {
+
+        logger.info("Uploading Image");
+
         if (image == null) throw new ErrorUploadingToB2Exception("The upload could not be completed because the image is null.");
         if (!validityTypeOfContent(image)) throw new FileInvalidFormatException("No other file formats are accepted besides -> jpeg and png");
 
@@ -95,6 +101,20 @@ public class PostService implements IService<PostDTO> {
         logger.info("Saving image metadata in the database");
         imageFromPostRepository.save(new ImageFromPost(null, response.getFileId(), post));
         return response;
+    }
+
+    public Resource getImageFromPost(String fileId) {
+
+        logger.info("Getting Image from Post by fileId");
+
+        if (validityFileId(fileId)) throw new InvalidFileIdException("The fileid is Empty or Blank.");
+        Resource image = b2ImageFromPostGateway.getImage(fileId);
+        if (image == null || !image.exists()) throw new ErrorGettingFromB2Exception("The returned image is null");
+        return image;
+    }
+
+    private static boolean validityFileId(String fileId) {
+        return StringUtils.isBlank(fileId) || StringUtils.isEmpty(fileId);
     }
 
     @Override
