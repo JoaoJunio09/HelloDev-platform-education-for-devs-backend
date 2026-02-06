@@ -76,9 +76,19 @@ public class ObjectConvertManually {
             entity.getContent(),
             entity.getDate().toString(),
             convertUserEntityToDto(entity.getUser()),
+            entity.getImagesFromPost() == null ? null : buildImageUrl(entity.getImagesFromPost().getFileId()),
             convertCommentListEntityToDto(entity.getComments()),
             convertLikeListEntityToDto(entity.getLikes())
         );
+    }
+
+    private String buildImageUrl(String fileId) {
+        if (fileId != null) {
+            final String BASE_URL = "http://localhost:8080";
+            return BASE_URL + "/api/posts/v1/getImageFromPost/" + fileId;
+        } else {
+            return null;
+        }
     }
 
     public UserDTO convertUserEntityToDto(User entity) {

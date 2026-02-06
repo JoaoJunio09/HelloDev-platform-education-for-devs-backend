@@ -14,6 +14,7 @@ import br.com.joaojuniodev.blog.exceptions.storage.InvalidFileIdException;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.model.ImageFromPost;
+import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
@@ -63,7 +64,7 @@ public class PostService implements IService<PostDTO> {
             .map(entity -> addHateoas(mapper.convertPostEntityToDto(entity)))
             .toList();
     }
-
+    
     @Override
     public PostDTO findById(Long id) {
 

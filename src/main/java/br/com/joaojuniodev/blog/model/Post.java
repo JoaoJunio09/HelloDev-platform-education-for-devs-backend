@@ -109,6 +109,14 @@ public class Post {
         this.user = user;
     }
 
+    public ImageFromPost getImagesFromPost() {
+        return imagesFromPost;
+    }
+
+    public void setImagesFromPost(ImageFromPost imagesFromPost) {
+        this.imagesFromPost = imagesFromPost;
+    }
+
     public List<Comment> getComments() {
         return comments;
     }

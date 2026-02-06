@@ -18,18 +18,20 @@ public class PostDTO extends RepresentationModel<PostDTO> {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String date;
     private UserDTO userDTO;
+    private String imageUrl;
     private List<CommentDTO> comments;
     private List<LikeDTO> likes;
 
     public PostDTO() {}
 
-    public PostDTO(Long id, String title, String subTitle, String content, String date, UserDTO userDTO, List<CommentDTO> comments, List<LikeDTO> likes) {
+    public PostDTO(Long id, String title, String subTitle, String content, String date, UserDTO userDTO, String imageUrl, List<CommentDTO> comments, List<LikeDTO> likes) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.content = content;
         this.date = date;
         this.userDTO = userDTO;
+        this.imageUrl = imageUrl;
         this.comments = comments;
         this.likes = likes;
     }
@@ -80,6 +82,14 @@ public class PostDTO extends RepresentationModel<PostDTO> {
 
     public void setUserDTO(UserDTO userDTO) {
         this.userDTO = userDTO;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public List<CommentDTO> getComments() {
