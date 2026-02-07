@@ -1,10 +1,8 @@
 package br.com.joaojuniodev.blog.services;
 
 import br.com.joaojuniodev.blog.controllers.PostController;
-import br.com.joaojuniodev.blog.data.dto.model.PersonDTO;
 import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
-import br.com.joaojuniodev.blog.exceptions.ErrorSavingEntityException;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
 import br.com.joaojuniodev.blog.exceptions.storage.ErrorGettingFromB2Exception;
@@ -14,12 +12,10 @@ import br.com.joaojuniodev.blog.exceptions.storage.InvalidFileIdException;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.model.ImageFromPost;
-import br.com.joaojuniodev.blog.model.Post;
+import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
 import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.core.util.ObjectMapperFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +55,7 @@ public class PostService implements IService<PostDTO> {
 
         logger.info("Finding all Post's");
 
-        return repository.findAll()
+        return repository.findAllWithUser()
             .stream()
             .map(entity -> addHateoas(mapper.convertPostEntityToDto(entity)))
             .toList();
@@ -88,7 +84,7 @@ public class PostService implements IService<PostDTO> {
         return addHateoas(mapper.convertPostEntityToDto(entity));
     }
 
-    public StoredFileResponse uploadImageFromPost(MultipartFile image, Long postId) {
+    public StoredFileResponse uploadImageFromPost(MultipartFile image, PostImageCategory category, Long postId) {
 
         logger.info("Uploading Image");
 
@@ -100,8 +96,19 @@ public class PostService implements IService<PostDTO> {
         var post = repository.findById(postId)
             .orElseThrow(() -> new NotFoundException("Not found this ID : " + postId));
         logger.info("Saving image metadata in the database");
-        imageFromPostRepository.save(new ImageFromPost(null, response.getFileId(), post));
+        imageFromPostRepository.save(
+            new ImageFromPost(null, response.getFileId(), buildImageUrl(response.getFileId()), category, post)
+        );
         return response;
+    }
+
+    private String buildImageUrl(String fileId) {
+        if (fileId != null) {
+            final String BASE_URL = "http://localhost:8080";
+            return BASE_URL + "/api/posts/v1/getImageFromPost/" + fileId;
+        } else {
+            return null;
+        }
     }
 
     public Resource getImageFromPost(String fileId) {

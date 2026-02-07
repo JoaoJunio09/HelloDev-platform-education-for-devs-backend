@@ -15,24 +15,22 @@ public class PostDTO extends RepresentationModel<PostDTO> {
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String date;
+    private String bannerUrl;
+    private String thumbnailUrl;
     private UserDTO userDTO;
-    private String imageUrl;
-    private List<CommentDTO> comments;
-    private List<LikeDTO> likes;
 
     public PostDTO() {}
 
-    public PostDTO(Long id, String title, String subTitle, String description, String content, String date, UserDTO userDTO, String imageUrl, List<CommentDTO> comments, List<LikeDTO> likes) {
+    public PostDTO(Long id, String title, String subTitle, String description, String content, String date, String bannerUrl, String thumbnailUrl, UserDTO userDTO) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.description = description;
         this.content = content;
         this.date = date;
+        this.bannerUrl = bannerUrl;
+        this.thumbnailUrl = thumbnailUrl;
         this.userDTO = userDTO;
-        this.imageUrl = imageUrl;
-        this.comments = comments;
-        this.likes = likes;
     }
 
     public Long getId() {
@@ -83,36 +81,28 @@ public class PostDTO extends RepresentationModel<PostDTO> {
         this.date = date;
     }
 
+    public String getBannerUrl() {
+        return bannerUrl;
+    }
+
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
     public UserDTO getUserDTO() {
         return userDTO;
     }
 
     public void setUserDTO(UserDTO userDTO) {
         this.userDTO = userDTO;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public List<CommentDTO> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentDTO> comments) {
-        this.comments = comments;
-    }
-
-    public List<LikeDTO> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<LikeDTO> likes) {
-        this.likes = likes;
     }
 
     @Override

@@ -5,6 +5,7 @@ import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mediatype.MediaTypes;
+import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
 import br.com.joaojuniodev.blog.services.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -75,10 +76,11 @@ public class PostController implements PostControllerDocs {
     @Override
     public ResponseEntity<StoredFileResponse> uploadImageFromPost(
         @RequestParam("image") MultipartFile image,
-        @PathVariable("postId") Long postId
+        @PathVariable("postId") Long postId,
+        @RequestParam("category") PostImageCategory category
     ) {
         StoredFileResponse fileResponse = null;
-        if (image != null || !image.isEmpty()) fileResponse = service.uploadImageFromPost(image, postId);
+        if (image != null || !image.isEmpty()) fileResponse = service.uploadImageFromPost(image, category, postId);
         return ResponseEntity.ok().body(fileResponse);
     }
 

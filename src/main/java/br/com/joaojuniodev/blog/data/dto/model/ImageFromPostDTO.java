@@ -1,32 +1,19 @@
-package br.com.joaojuniodev.blog.model;
+package br.com.joaojuniodev.blog.data.dto.model;
 
+import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
-import jakarta.persistence.*;
 
-@Entity
-@Table
-public class ImageFromPost {
+public class ImageFromPostDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
     private String fileId;
-
-    @Column
     private String imageUrl;
-
-    @Column
     private PostImageCategory category;
-
-    @JoinColumn(name = "post_id")
-    @ManyToOne
     private Post post;
 
-    public ImageFromPost() {}
+    public ImageFromPostDTO() {}
 
-    public ImageFromPost(Long id, String fileId, String imageUrl, PostImageCategory category, Post post) {
+    public ImageFromPostDTO(Long id, String fileId, String imageUrl, PostImageCategory category, Post post) {
         this.id = id;
         this.fileId = fileId;
         this.imageUrl = imageUrl;

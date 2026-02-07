@@ -34,8 +34,8 @@ public class Post {
     @ManyToOne
     private User user;
 
-    @OneToOne(mappedBy = "post")
-    private ImageFromPost imagesFromPost;
+    @OneToMany(mappedBy = "post")
+    private List<ImageFromPost> imagesFromPosts;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
@@ -53,7 +53,7 @@ public class Post {
         this.date = date;
     }
 
-    public Post(Long id, String title, String subTitle, String description, String content, LocalDate date, User user, List<Comment> comments, List<Like> likes) {
+    public Post(Long id, String title, String subTitle, String description, String content, LocalDate date, User user) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
@@ -61,8 +61,6 @@ public class Post {
         this.content = content;
         this.date = date;
         this.user = user;
-        this.comments = comments;
-        this.likes = likes;
     }
 
     public Long getId() {
@@ -121,12 +119,12 @@ public class Post {
         this.user = user;
     }
 
-    public ImageFromPost getImagesFromPost() {
-        return imagesFromPost;
+    public List<ImageFromPost> getImagesFromPosts() {
+        return imagesFromPosts;
     }
 
-    public void setImagesFromPost(ImageFromPost imagesFromPost) {
-        this.imagesFromPost = imagesFromPost;
+    public void setImagesFromPosts(List<ImageFromPost> imagesFromPosts) {
+        this.imagesFromPosts = imagesFromPosts;
     }
 
     public List<Comment> getComments() {

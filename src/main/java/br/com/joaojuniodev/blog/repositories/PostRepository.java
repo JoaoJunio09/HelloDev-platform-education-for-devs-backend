@@ -6,10 +6,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
+
+    @Query("""
+        SELECT p FROM Post p
+        JOIN FETCH p.user
+        ORDER BY p.date DESC
+    """)
+    List<Post> findAllWithUser();
 
     @Query("""      
         SELECT DISTINCT p FROM Post p

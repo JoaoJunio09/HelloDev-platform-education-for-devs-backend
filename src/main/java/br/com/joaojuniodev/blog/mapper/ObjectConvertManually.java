@@ -3,6 +3,7 @@ package br.com.joaojuniodev.blog.mapper;
 import br.com.joaojuniodev.blog.data.dto.model.*;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.model.*;
+import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
 import br.com.joaojuniodev.blog.repositories.CommentRepository;
 import br.com.joaojuniodev.blog.repositories.LikeRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
@@ -11,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -64,9 +67,8 @@ public class ObjectConvertManually {
             dto.getDescription(),
             dto.getContent(),
             date,
-            user,
-            convertCommentListDtoToEntity(dto.getComments()),
-            convertLikeListDtoToEntity(dto.getLikes()));
+            user
+        );
     }
 
     public PostDTO convertPostEntityToDto(Post entity) {
@@ -77,20 +79,43 @@ public class ObjectConvertManually {
             entity.getDescription(),
             entity.getContent(),
             entity.getDate().toString(),
-            convertUserEntityToDto(entity.getUser()),
-            entity.getImagesFromPost() == null ? null : buildImageUrl(entity.getImagesFromPost().getFileId()),
-            convertCommentListEntityToDto(entity.getComments()),
-            convertLikeListEntityToDto(entity.getLikes())
+            buildBannerUrl(entity.getImagesFromPosts(), entity.getId()),
+            buildThumbnailUrl(entity.getImagesFromPosts(), entity.getId()),
+            convertUserEntityToDto(entity.getUser())
         );
     }
 
-    private String buildImageUrl(String fileId) {
-        if (fileId != null) {
-            final String BASE_URL = "http://localhost:8080";
-            return BASE_URL + "/api/posts/v1/getImageFromPost/" + fileId;
-        } else {
-            return null;
+    private String buildBannerUrl(List<ImageFromPost> images, Long postId) {
+        for (ImageFromPost image : images) {
+            if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategory.BANNER)) {
+                return image.getImageUrl();
+            }
         }
+        return "";
+    }
+
+    private String buildThumbnailUrl(List<ImageFromPost> images, Long postId) {
+        for (ImageFromPost image : images) {
+            if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategory.THUMBNAIL)) {
+                return image.getImageUrl();
+            }
+        }
+        return "";
+    }
+
+    private List<ImageFromPostDTO> convertImagesFromPostsListToDto(List<ImageFromPost> entities) {
+        if (entities == null) return List.of();
+        var list = new ArrayList<ImageFromPostDTO>();
+        for (ImageFromPost image : entities) {
+            list.add(new ImageFromPostDTO(
+                image.getId(),
+                image.getFileId(),
+                image.getImageUrl(),
+                image.getCategory(),
+                image.getPost()
+            ));
+        }
+        return list;
     }
 
     public UserDTO convertUserEntityToDto(User entity) {
