@@ -22,6 +22,9 @@ public class Post {
     private String subTitle;
 
     @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
@@ -50,10 +53,11 @@ public class Post {
         this.date = date;
     }
 
-    public Post(Long id, String title, String subTitle, String content, LocalDate date, User user, List<Comment> comments, List<Like> likes) {
+    public Post(Long id, String title, String subTitle, String description, String content, LocalDate date, User user, List<Comment> comments, List<Like> likes) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
+        this.description = description;
         this.content = content;
         this.date = date;
         this.user = user;
@@ -83,6 +87,14 @@ public class Post {
 
     public void setSubTitle(String subTitle) {
         this.subTitle = subTitle;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getContent() {

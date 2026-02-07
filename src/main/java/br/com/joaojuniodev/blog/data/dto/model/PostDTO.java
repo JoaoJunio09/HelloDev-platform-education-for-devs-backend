@@ -1,11 +1,8 @@
 package br.com.joaojuniodev.blog.data.dto.model;
 
-import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +11,7 @@ public class PostDTO extends RepresentationModel<PostDTO> {
     private Long id;
     private String title;
     private String subTitle;
+    private String description;
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String date;
@@ -24,10 +22,11 @@ public class PostDTO extends RepresentationModel<PostDTO> {
 
     public PostDTO() {}
 
-    public PostDTO(Long id, String title, String subTitle, String content, String date, UserDTO userDTO, String imageUrl, List<CommentDTO> comments, List<LikeDTO> likes) {
+    public PostDTO(Long id, String title, String subTitle, String description, String content, String date, UserDTO userDTO, String imageUrl, List<CommentDTO> comments, List<LikeDTO> likes) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
+        this.description = description;
         this.content = content;
         this.date = date;
         this.userDTO = userDTO;
@@ -58,6 +57,14 @@ public class PostDTO extends RepresentationModel<PostDTO> {
 
     public void setSubTitle(String subTitle) {
         this.subTitle = subTitle;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getContent() {
