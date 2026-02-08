@@ -86,6 +86,7 @@ public class ObjectConvertManually {
     }
 
     private String buildBannerUrl(List<ImageFromPost> images, Long postId) {
+        if (images == null) return "";
         for (ImageFromPost image : images) {
             if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategory.BANNER)) {
                 return image.getImageUrl();
@@ -95,6 +96,7 @@ public class ObjectConvertManually {
     }
 
     private String buildThumbnailUrl(List<ImageFromPost> images, Long postId) {
+        if (images == null) return "";
         for (ImageFromPost image : images) {
             if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategory.THUMBNAIL)) {
                 return image.getImageUrl();
