@@ -1,6 +1,7 @@
 package br.com.joaojuniodev.blog.services;
 
 import br.com.joaojuniodev.blog.controllers.PostController;
+import br.com.joaojuniodev.blog.data.dto.model.PostAddedToDraftsDTO;
 import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
@@ -12,7 +13,8 @@ import br.com.joaojuniodev.blog.exceptions.storage.InvalidFileIdException;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.model.ImageFromPost;
-import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
+import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
+import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
@@ -84,7 +86,7 @@ public class PostService implements IService<PostDTO> {
         return addHateoas(mapper.convertPostEntityToDto(entity));
     }
 
-    public StoredFileResponse uploadImageFromPost(MultipartFile image, PostImageCategory category, Long postId) {
+    public StoredFileResponse uploadImageFromPost(MultipartFile image, PostImageCategoryEnum category, Long postId) {
 
         logger.info("Uploading Image");
 
@@ -121,17 +123,13 @@ public class PostService implements IService<PostDTO> {
         return image;
     }
 
-    private static boolean validityFileId(String fileId) {
-        return StringUtils.isBlank(fileId) || StringUtils.isEmpty(fileId);
-    }
-
     @Override
     public PostDTO update(PostDTO post) {
 
         logger.info("Updating a exists Post");
 
         var entity = repository.findById(post.getId())
-                .orElseThrow(() -> new NotFoundException("Not found this ID:" + post.getId()));
+            .orElseThrow(() -> new NotFoundException("Not found this ID:" + post.getId()));
         entity.setTitle(post.getTitle());
         entity.setSubTitle(post.getSubTitle());
         entity.setContent(post.getContent());
@@ -145,6 +143,10 @@ public class PostService implements IService<PostDTO> {
         var entity = repository.findById(id)
             .orElseThrow(() -> new NotFoundException("Not found this ID:" + id));
         repository.delete(entity);
+    }
+
+    private static boolean validityFileId(String fileId) {
+        return StringUtils.isBlank(fileId) || StringUtils.isEmpty(fileId);
     }
 
     public boolean validityTypeOfContent(MultipartFile image) {

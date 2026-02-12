@@ -4,7 +4,7 @@ import br.com.joaojuniodev.blog.controllers.PostController;
 import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.mediatype.MediaTypes;
-import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
+import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -92,7 +92,7 @@ public interface PostControllerDocs {
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
         }
     )
-    ResponseEntity<StoredFileResponse> uploadImageFromPost(MultipartFile image, Long postId, PostImageCategory category);
+    ResponseEntity<StoredFileResponse> uploadImageFromPost(MultipartFile image, Long postId, PostImageCategoryEnum category);
 
     @Operation(
             tags = {"Post"},

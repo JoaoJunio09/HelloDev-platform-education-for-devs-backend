@@ -1,6 +1,6 @@
 package br.com.joaojuniodev.blog.model;
 
-import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
+import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
 import jakarta.persistence.*;
 
 @Entity
@@ -18,7 +18,7 @@ public class ImageFromPost {
     private String imageUrl;
 
     @Column
-    private PostImageCategory category;
+    private PostImageCategoryEnum category;
 
     @JoinColumn(name = "post_id")
     @ManyToOne
@@ -26,7 +26,7 @@ public class ImageFromPost {
 
     public ImageFromPost() {}
 
-    public ImageFromPost(Long id, String fileId, String imageUrl, PostImageCategory category, Post post) {
+    public ImageFromPost(Long id, String fileId, String imageUrl, PostImageCategoryEnum category, Post post) {
         this.id = id;
         this.fileId = fileId;
         this.imageUrl = imageUrl;
@@ -58,11 +58,11 @@ public class ImageFromPost {
         this.imageUrl = imageUrl;
     }
 
-    public PostImageCategory getCategory() {
+    public PostImageCategoryEnum getCategory() {
         return category;
     }
 
-    public void setCategory(PostImageCategory category) {
+    public void setCategory(PostImageCategoryEnum category) {
         this.category = category;
     }
 

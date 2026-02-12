@@ -17,11 +17,13 @@ public class PostDTO extends RepresentationModel<PostDTO> {
     private String date;
     private String bannerUrl;
     private String thumbnailUrl;
+    private String status;
+    private String category;
     private UserDTO userDTO;
 
     public PostDTO() {}
 
-    public PostDTO(Long id, String title, String subTitle, String description, String content, String date, String bannerUrl, String thumbnailUrl, UserDTO userDTO) {
+    public PostDTO(Long id, String title, String subTitle, String description, String content, String date, String bannerUrl, String thumbnailUrl, String status, String category, UserDTO userDTO) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
@@ -30,6 +32,8 @@ public class PostDTO extends RepresentationModel<PostDTO> {
         this.date = date;
         this.bannerUrl = bannerUrl;
         this.thumbnailUrl = thumbnailUrl;
+        this.status = status;
+        this.category = category;
         this.userDTO = userDTO;
     }
 
@@ -95,6 +99,22 @@ public class PostDTO extends RepresentationModel<PostDTO> {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public UserDTO getUserDTO() {

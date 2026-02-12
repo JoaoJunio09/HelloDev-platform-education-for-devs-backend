@@ -1,6 +1,6 @@
 package br.com.joaojuniodev.blog.model.enums;
 
-public enum PostImageCategory {
+public enum PostImageCategoryEnum {
     BANNER,
     THUMBNAIL
 }

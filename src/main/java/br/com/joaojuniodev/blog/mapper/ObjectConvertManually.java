@@ -3,7 +3,9 @@ package br.com.joaojuniodev.blog.mapper;
 import br.com.joaojuniodev.blog.data.dto.model.*;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.model.*;
-import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
+import br.com.joaojuniodev.blog.model.enums.PostCategoryEnum;
+import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
+import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import br.com.joaojuniodev.blog.repositories.CommentRepository;
 import br.com.joaojuniodev.blog.repositories.LikeRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,8 @@ public class ObjectConvertManually {
             dto.getDescription(),
             dto.getContent(),
             date,
+            PostStatusEnum.valueOf(dto.getStatus()),
+            PostCategoryEnum.valueOf(dto.getCategory()),
             user
         );
     }
@@ -81,6 +84,8 @@ public class ObjectConvertManually {
             entity.getDate().toString(),
             buildBannerUrl(entity.getImagesFromPosts(), entity.getId()),
             buildThumbnailUrl(entity.getImagesFromPosts(), entity.getId()),
+            entity.getStatus().toString(),
+            entity.getCategory().toString(),
             convertUserEntityToDto(entity.getUser())
         );
     }
@@ -88,7 +93,7 @@ public class ObjectConvertManually {
     private String buildBannerUrl(List<ImageFromPost> images, Long postId) {
         if (images == null) return "";
         for (ImageFromPost image : images) {
-            if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategory.BANNER)) {
+            if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategoryEnum.BANNER)) {
                 return image.getImageUrl();
             }
         }
@@ -98,7 +103,7 @@ public class ObjectConvertManually {
     private String buildThumbnailUrl(List<ImageFromPost> images, Long postId) {
         if (images == null) return "";
         for (ImageFromPost image : images) {
-            if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategory.THUMBNAIL)) {
+            if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategoryEnum.THUMBNAIL)) {
                 return image.getImageUrl();
             }
         }

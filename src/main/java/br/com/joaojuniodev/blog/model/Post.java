@@ -1,5 +1,7 @@
 package br.com.joaojuniodev.blog.model;
 
+import br.com.joaojuniodev.blog.model.enums.PostCategoryEnum;
+import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -30,6 +32,12 @@ public class Post {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Column
+    private PostStatusEnum status;
+
+    @Column
+    private PostCategoryEnum category;
+
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
@@ -53,13 +61,15 @@ public class Post {
         this.date = date;
     }
 
-    public Post(Long id, String title, String subTitle, String description, String content, LocalDate date, User user) {
+    public Post(Long id, String title, String subTitle, String description, String content, LocalDate date, PostStatusEnum status, PostCategoryEnum category, User user) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.description = description;
         this.content = content;
         this.date = date;
+        this.status = status;
+        this.category = category;
         this.user = user;
     }
 
@@ -109,6 +119,22 @@ public class Post {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public PostStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(PostStatusEnum status) {
+        this.status = status;
+    }
+
+    public PostCategoryEnum getCategory() {
+        return category;
+    }
+
+    public void setCategory(PostCategoryEnum category) {
+        this.category = category;
     }
 
     public User getUser() {

@@ -1,19 +1,19 @@
 package br.com.joaojuniodev.blog.data.dto.model;
 
 import br.com.joaojuniodev.blog.model.Post;
-import br.com.joaojuniodev.blog.model.enums.PostImageCategory;
+import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
 
 public class ImageFromPostDTO {
 
     private Long id;
     private String fileId;
     private String imageUrl;
-    private PostImageCategory category;
+    private PostImageCategoryEnum category;
     private Post post;
 
     public ImageFromPostDTO() {}
 
-    public ImageFromPostDTO(Long id, String fileId, String imageUrl, PostImageCategory category, Post post) {
+    public ImageFromPostDTO(Long id, String fileId, String imageUrl, PostImageCategoryEnum category, Post post) {
         this.id = id;
         this.fileId = fileId;
         this.imageUrl = imageUrl;
@@ -45,11 +45,11 @@ public class ImageFromPostDTO {
         this.imageUrl = imageUrl;
     }
 
-    public PostImageCategory getCategory() {
+    public PostImageCategoryEnum getCategory() {
         return category;
     }
 
-    public void setCategory(PostImageCategory category) {
+    public void setCategory(PostImageCategoryEnum category) {
         this.category = category;
     }
 
