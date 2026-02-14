@@ -1,7 +1,7 @@
 package br.com.joaojuniodev.blog.services;
 
 import br.com.joaojuniodev.blog.controllers.PostController;
-import br.com.joaojuniodev.blog.data.dto.model.PostAddedToDraftsDTO;
+import br.com.joaojuniodev.blog.data.dto.model.PersonDTO;
 import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
@@ -13,8 +13,8 @@ import br.com.joaojuniodev.blog.exceptions.storage.InvalidFileIdException;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.model.ImageFromPost;
+import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
-import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
@@ -23,9 +23,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,18 +59,35 @@ public class PostService implements IService<PostDTO> {
     @Autowired
     private B2ImageFromPostGateway b2ImageFromPostGateway;
 
+    @Autowired
+    PagedResourcesAssembler<PostDTO> assembler;
+
     @Transactional
     @Override
-    public List<PostDTO> findAll() {
+    public PagedModel<EntityModel<PostDTO>> findAll(Pageable pageable) {
 
         logger.info("Finding all Post's");
 
-        return repository.findAllWithUser()
-            .stream()
+        var posts = repository.findAllWithUser();
+        return buildPagedModel(pageable, posts);
+    }
+
+    private PagedModel<EntityModel<PostDTO>> buildPagedModel(Pageable pageable, List<Post> posts) {
+        var postsWithLinks = posts.stream()
             .map(entity -> addHateoas(mapper.convertPostEntityToDto(entity)))
             .toList();
+
+        Link findAllLink = WebMvcLinkBuilder.linkTo(
+            WebMvcLinkBuilder.methodOn(PostController.class)
+                .findAll(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    String.valueOf(pageable.getSort())))
+                .withSelfRel();
+
+        return assembler.toModel((Page<PostDTO>) postsWithLinks, findAllLink);
     }
-    
+
     @Override
     public PostDTO findById(Long id) {
 
@@ -156,7 +181,7 @@ public class PostService implements IService<PostDTO> {
 
     private PostDTO addHateoas(PostDTO dto) {
         dto.add(linkTo(methodOn(PostController.class).findById(dto.getId())).withSelfRel().withType("GET"));
-        dto.add(linkTo(methodOn(PostController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PostController.class).findAll(0, 12, "asc")).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PostController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PostController.class).update(dto)).withRel("update").withType("PUT"));
         dto.add(linkTo(methodOn(PostController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));

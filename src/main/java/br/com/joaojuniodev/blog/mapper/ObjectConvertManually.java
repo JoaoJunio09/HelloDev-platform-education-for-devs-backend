@@ -23,17 +23,11 @@ public class ObjectConvertManually {
 
     private final Logger logger = LoggerFactory.getLogger(ObjectConvertManually.class.getName());
 
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository;
+    private UserRepository userRepository;
+    private PostRepository postRepository;
+    private CommentRepository commentRepository;
 
-    public ObjectConvertManually(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository, LikeRepository likeRepository) {
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-        this.commentRepository = commentRepository;
-        this.likeRepository = likeRepository;
-    }
+    public ObjectConvertManually() {}
 
     public PersonDTO convertPersonEntityToDto(Person entity) {
         return new PersonDTO(
@@ -84,8 +78,8 @@ public class ObjectConvertManually {
             entity.getDate().toString(),
             buildBannerUrl(entity.getImagesFromPosts(), entity.getId()),
             buildThumbnailUrl(entity.getImagesFromPosts(), entity.getId()),
-            entity.getStatus().toString(),
-            entity.getCategory().toString(),
+            entity.getStatus() == null ? "" : entity.getStatus().toString(),
+            entity.getCategory() == null ? "" : entity.getCategory().toString(),
             convertUserEntityToDto(entity.getUser())
         );
     }
