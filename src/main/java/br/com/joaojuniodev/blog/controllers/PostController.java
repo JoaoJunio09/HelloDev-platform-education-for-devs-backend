@@ -47,8 +47,8 @@ public class PostController implements PostControllerDocs {
         @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
-        return ResponseEntity.ok().body(service.findAll(pageable));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+        return ResponseEntity.ok().body(service.findAllPageable(pageable));
     }
 
     @GetMapping(

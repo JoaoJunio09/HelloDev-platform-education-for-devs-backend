@@ -63,29 +63,23 @@ public class PostService implements IService<PostDTO> {
     PagedResourcesAssembler<PostDTO> assembler;
 
     @Transactional
-    @Override
-    public PagedModel<EntityModel<PostDTO>> findAll(Pageable pageable) {
+    public PagedModel<EntityModel<PostDTO>> findAllPageable(Pageable pageable) {
 
-        logger.info("Finding all Post's");
+        logger.info("Finding all Post's for Pageable");
 
-        var posts = repository.findAllWithUser();
+        var posts = repository.findAllWithUser(pageable);
         return buildPagedModel(pageable, posts);
     }
 
-    private PagedModel<EntityModel<PostDTO>> buildPagedModel(Pageable pageable, List<Post> posts) {
-        var postsWithLinks = posts.stream()
+    @Override
+    public List<PostDTO> findAll() {
+
+        logger.info("Finding all Post's");
+
+        return repository.findAll()
+            .stream()
             .map(entity -> addHateoas(mapper.convertPostEntityToDto(entity)))
             .toList();
-
-        Link findAllLink = WebMvcLinkBuilder.linkTo(
-            WebMvcLinkBuilder.methodOn(PostController.class)
-                .findAll(
-                    pageable.getPageNumber(),
-                    pageable.getPageSize(),
-                    String.valueOf(pageable.getSort())))
-                .withSelfRel();
-
-        return assembler.toModel((Page<PostDTO>) postsWithLinks, findAllLink);
     }
 
     @Override
@@ -177,6 +171,21 @@ public class PostService implements IService<PostDTO> {
     public boolean validityTypeOfContent(MultipartFile image) {
         return image.getContentType().equalsIgnoreCase("image/jpeg") ||
             image.getContentType().equalsIgnoreCase("image/png");
+    }
+
+    private PagedModel<EntityModel<PostDTO>> buildPagedModel(Pageable pageable, Page<Post> posts) {
+        var postsWithLinks = posts
+            .map(entity -> addHateoas(mapper.convertPostEntityToDto(entity)));
+
+        Link findAllLink = WebMvcLinkBuilder.linkTo(
+            WebMvcLinkBuilder.methodOn(PostController.class)
+                .findAll(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    String.valueOf(pageable.getSort())))
+                .withSelfRel();
+
+        return assembler.toModel(postsWithLinks, findAllLink);
     }
 
     private PostDTO addHateoas(PostDTO dto) {
