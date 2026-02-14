@@ -14,7 +14,9 @@ import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGate
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.model.ImageFromPost;
 import br.com.joaojuniodev.blog.model.Post;
+import br.com.joaojuniodev.blog.model.enums.PostCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
+import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
@@ -152,6 +154,8 @@ public class PostService implements IService<PostDTO> {
         entity.setTitle(post.getTitle());
         entity.setSubTitle(post.getSubTitle());
         entity.setContent(post.getContent());
+        entity.setStatus(PostStatusEnum.valueOf(post.getStatus()));
+        entity.setCategory(PostCategoryEnum.valueOf(post.getCategory()));
         return addHateoas(mapper.convertPostEntityToDto(repository.save(entity)));
     }
 
