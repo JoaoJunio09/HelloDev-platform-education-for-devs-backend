@@ -7,7 +7,6 @@ import br.com.joaojuniodev.blog.model.enums.PostCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import br.com.joaojuniodev.blog.repositories.CommentRepository;
-import br.com.joaojuniodev.blog.repositories.LikeRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -23,11 +22,15 @@ public class ObjectConvertManually {
 
     private final Logger logger = LoggerFactory.getLogger(ObjectConvertManually.class.getName());
 
-    private UserRepository userRepository;
-    private PostRepository postRepository;
-    private CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
-    public ObjectConvertManually() {}
+    public ObjectConvertManually(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository) {
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
+    }
 
     public PersonDTO convertPersonEntityToDto(Person entity) {
         return new PersonDTO(
@@ -47,8 +50,8 @@ public class ObjectConvertManually {
             dto.getPhone());
     }
 
+    User user = null;
     public Post convertPostDtoToEntity(PostDTO dto) {
-        User user = null;
         try {
             user = userRepository.findByUsername(dto.getUserDTO().getUsername());
         } catch (Exception e) {

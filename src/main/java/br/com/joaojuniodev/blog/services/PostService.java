@@ -1,7 +1,6 @@
 package br.com.joaojuniodev.blog.services;
 
 import br.com.joaojuniodev.blog.controllers.PostController;
-import br.com.joaojuniodev.blog.data.dto.model.PersonDTO;
 import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
@@ -17,13 +16,16 @@ import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.model.enums.PostCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
+import br.com.joaojuniodev.blog.repositories.CommentRepository;
 import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
+import br.com.joaojuniodev.blog.repositories.UserRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,8 +51,7 @@ public class PostService implements IService<PostDTO> {
 
     private final Logger logger = LoggerFactory.getLogger(PostService.class.getName());
 
-    @Autowired
-    ObjectConvertManually mapper;
+    private final ObjectConvertManually mapper;
 
     @Autowired
     PostRepository repository;
@@ -59,10 +60,14 @@ public class PostService implements IService<PostDTO> {
     ImageFromPostRepository imageFromPostRepository;
 
     @Autowired
-    private B2ImageFromPostGateway b2ImageFromPostGateway;
+    B2ImageFromPostGateway b2ImageFromPostGateway;
 
     @Autowired
     PagedResourcesAssembler<PostDTO> assembler;
+
+    public PostService(ObjectConvertManually mapper) {
+        this.mapper = mapper;
+    }
 
     @Transactional
     public PagedModel<EntityModel<PostDTO>> findAllPageable(Pageable pageable) {
