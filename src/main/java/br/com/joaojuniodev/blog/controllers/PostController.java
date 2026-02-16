@@ -8,6 +8,7 @@ import br.com.joaojuniodev.blog.mediatype.MediaTypes;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
 import br.com.joaojuniodev.blog.services.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -36,12 +37,13 @@ public class PostController implements PostControllerDocs {
     private B2ImageFromPostGateway cloudB2Gateway;
 
     @GetMapping(
+        value = "/pageable",
         produces = {
             MediaTypes.APPLICATION_JSON,
             MediaTypes.APPLICATION_XML,
             MediaTypes.APPLICATION_YAML })
     @Override
-    public ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAll(
+    public ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAllPageable(
         @RequestParam(value = "page", defaultValue = "0") Integer page,
         @RequestParam(value = "size", defaultValue = "0") Integer size,
         @RequestParam(value = "direction", defaultValue = "asc") String direction
@@ -49,6 +51,16 @@ public class PostController implements PostControllerDocs {
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
         return ResponseEntity.ok().body(service.findAllPageable(pageable));
+    }
+
+    @GetMapping(
+        produces = {
+            MediaTypes.APPLICATION_JSON,
+            MediaTypes.APPLICATION_XML,
+            MediaTypes.APPLICATION_YAML })
+    @Override
+    public ResponseEntity<List<PostDTO>> findAll() {
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping(

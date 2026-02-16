@@ -188,7 +188,7 @@ public class PostService implements IService<PostDTO> {
 
         Link findAllLink = WebMvcLinkBuilder.linkTo(
             WebMvcLinkBuilder.methodOn(PostController.class)
-                .findAll(
+                .findAllPageable(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
                     String.valueOf(pageable.getSort())))
@@ -199,7 +199,8 @@ public class PostService implements IService<PostDTO> {
 
     private PostDTO addHateoas(PostDTO dto) {
         dto.add(linkTo(methodOn(PostController.class).findById(dto.getId())).withSelfRel().withType("GET"));
-        dto.add(linkTo(methodOn(PostController.class).findAll(0, 12, "asc")).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PostController.class).findAllPageable(0, 12, "asc")).withRel("findAllPageable").withType("GET"));
+        dto.add(linkTo(methodOn(PostController.class).findAll()).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PostController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PostController.class).update(dto)).withRel("update").withType("PUT"));
         dto.add(linkTo(methodOn(PostController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
