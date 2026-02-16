@@ -6,6 +6,7 @@ import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mediatype.MediaTypes;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
+import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import br.com.joaojuniodev.blog.services.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.coyote.Response;
@@ -61,6 +62,25 @@ public class PostController implements PostControllerDocs {
     @Override
     public ResponseEntity<List<PostDTO>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
+    }
+
+    @GetMapping(
+        value = "/by" +
+                "",
+        produces = {
+            MediaTypes.APPLICATION_JSON,
+            MediaTypes.APPLICATION_XML,
+            MediaTypes.APPLICATION_YAML })
+    @Override
+    public ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAllByStatus(
+            @RequestParam PostStatusEnum status,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "0") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction
+    ) {
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+        return ResponseEntity.ok().body(service.findAllByStatus(status, pageable));
     }
 
     @GetMapping(

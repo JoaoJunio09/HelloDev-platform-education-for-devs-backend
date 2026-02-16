@@ -1,6 +1,8 @@
 package br.com.joaojuniodev.blog.repositories;
 
 import br.com.joaojuniodev.blog.model.Post;
+import br.com.joaojuniodev.blog.model.enums.PostCategoryEnum;
+import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +28,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         WHERE p.id = :id
     """)
     Optional<Post> findByIdWithComments(@Param("id") Long id);
+
+    @Query("""
+        SELECT p FROM Post p
+        WHERE p.status = :status
+    """)
+    Page<Post> findByStatus(@Param("status") PostStatusEnum status, Pageable pageable);
+
+    @Query("""
+        SELECT p FROM Post p
+        WHERE p.category = :category
+    """)
+    Page<Post> findByCategory(@Param("category") PostCategoryEnum category, Pageable pageable);
 }

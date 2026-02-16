@@ -5,6 +5,7 @@ import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.mediatype.MediaTypes;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
+import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -65,6 +66,31 @@ public interface PostControllerDocs {
         }
     )
     ResponseEntity<List<PostDTO>> findAll();
+
+    @Operation(
+        tags = {"Person"},
+        summary = "Finds all Post's by Status for Pageable",
+        description = "Finds all Post's by Status for Pageable",
+        responses = {
+            @ApiResponse(
+                description = "Success",
+                responseCode = "200",
+                content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = PostController.class)))),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+            @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+            @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+        }
+    )
+    ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAllByStatus(
+        @RequestParam PostStatusEnum status,
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "size", defaultValue = "0") Integer size,
+        @RequestParam(value = "direction", defaultValue = "asc") String direction
+    );
 
     @Operation(
         tags = {"Post"},

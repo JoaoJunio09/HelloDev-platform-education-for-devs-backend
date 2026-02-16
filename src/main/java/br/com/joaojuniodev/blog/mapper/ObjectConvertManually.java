@@ -37,7 +37,7 @@ public class ObjectConvertManually {
             entity.getId(),
             entity.getFirstName(),
             entity.getLastName(),
-            entity.getBirthDate(),
+            String.valueOf(entity.getBirthDate()),
             entity.getPhone());
     }
 
@@ -46,7 +46,7 @@ public class ObjectConvertManually {
             dto.getId(),
             dto.getFirstName(),
             dto.getLastName(),
-            dto.getBirthDate(),
+            LocalDate.parse(dto.getBirthDate()),
             dto.getPhone());
     }
 
@@ -57,14 +57,13 @@ public class ObjectConvertManually {
         } catch (Exception e) {
             throw new NotFoundException("User not found");
         }
-        var date = LocalDate.parse(dto.getDate());
         return new Post(
             dto.getId(),
             dto.getTitle(),
             dto.getSubTitle(),
             dto.getDescription(),
             dto.getContent(),
-            date,
+            LocalDate.parse(dto.getDate()),
             PostStatusEnum.valueOf(dto.getStatus()),
             PostCategoryEnum.valueOf(dto.getCategory()),
             user

@@ -32,9 +32,11 @@ public class Post {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private PostStatusEnum status;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private PostCategoryEnum category;
 

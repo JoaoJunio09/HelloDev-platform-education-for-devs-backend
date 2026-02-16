@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -68,7 +69,7 @@ public class PersonService implements IService<PersonDTO> {
                 .orElseThrow(() -> new NotFoundException("Not found this ID:" + person.getId()));
         entity.setFirstName(person.getFirstName());
         entity.setLastName(person.getLastName());
-        entity.setBirthDate(person.getBirthDate());
+        entity.setBirthDate(LocalDate.parse(person.getBirthDate()));
         entity.setPhone(person.getPhone());
         return addHateoas(mapper.convertPersonEntityToDto(repository.save(entity)));
     }

@@ -89,6 +89,22 @@ public class PostService implements IService<PostDTO> {
             .toList();
     }
 
+    public PagedModel<EntityModel<PostDTO>> findAllByStatus(PostStatusEnum status, Pageable pageable) {
+
+        logger.info("Finding All Post's by Status");
+
+        var posts = repository.findByStatus(status, pageable);
+        return buildPagedModel(pageable, posts);
+    }
+
+    public PagedModel<EntityModel<PostDTO>> findAllByCategory(PostCategoryEnum category, Pageable pageable) {
+
+        logger.info("Finding All Post's by Category");
+
+        var posts = repository.findByCategory(category, pageable);
+        return buildPagedModel(pageable, posts);
+    }
+
     @Override
     public PostDTO findById(Long id) {
 
