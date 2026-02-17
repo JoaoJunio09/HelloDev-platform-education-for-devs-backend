@@ -40,4 +40,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         WHERE p.category = :category
     """)
     Page<Post> findByCategory(@Param("category") PostCategoryEnum category, Pageable pageable);
+
+    @Query("""
+        SELECT p FROM Post p
+        WHERE p.status = :status AND p.category = :category
+    """)
+    Page<Post> findByStatusAndCategory(
+        @Param("status") PostStatusEnum status,
+        @Param("category") PostCategoryEnum category,
+        Pageable pageable
+    );
 }

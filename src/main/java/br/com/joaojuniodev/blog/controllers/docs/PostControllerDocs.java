@@ -112,10 +112,36 @@ public interface PostControllerDocs {
         }
     )
     ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAllByCategory(
-            @RequestParam(value = "category") PostCategoryEnum category,
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "0") Integer size,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction
+        @RequestParam(value = "category") PostCategoryEnum category,
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "size", defaultValue = "0") Integer size,
+        @RequestParam(value = "direction", defaultValue = "asc") String direction
+    );
+
+    @Operation(
+        tags = {"Post"},
+        summary = "Finds all Post's by Status and Category for Pageable",
+        description = "Finds all Post's by Status and Category for Pageable",
+        responses = {
+            @ApiResponse(
+                description = "Success",
+                responseCode = "200",
+                content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = PostController.class)))),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+            @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+            @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+        }
+    )
+    ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAllByStatusAndCategory(
+        @RequestParam(value = "status") PostStatusEnum status,
+        @RequestParam(value = "category") PostCategoryEnum category,
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "size", defaultValue = "0") Integer size,
+        @RequestParam(value = "direction", defaultValue = "asc") String direction
     );
 
     @Operation(

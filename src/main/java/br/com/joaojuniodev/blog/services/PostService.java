@@ -39,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.swing.text.html.parser.Entity;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -102,6 +103,14 @@ public class PostService implements IService<PostDTO> {
         logger.info("Finding All Post's by Category");
 
         var posts = repository.findByCategory(category, pageable);
+        return buildPagedModel(pageable, posts);
+    }
+
+    public  PagedModel<EntityModel<PostDTO>> findAllByStatusAndCategory(PostStatusEnum status, PostCategoryEnum category, Pageable pageable) {
+
+        logger.info("Finding All Post's by Status and Category");
+
+        var posts = repository.findByStatusAndCategory(status, category, pageable);
         return buildPagedModel(pageable, posts);
     }
 

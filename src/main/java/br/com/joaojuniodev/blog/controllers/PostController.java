@@ -102,6 +102,25 @@ public class PostController implements PostControllerDocs {
     }
 
     @GetMapping(
+        value = "/by-status-and-category",
+        produces = {
+            MediaTypes.APPLICATION_JSON,
+            MediaTypes.APPLICATION_XML,
+            MediaTypes.APPLICATION_YAML })
+    @Override
+    public ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAllByStatusAndCategory(
+        @RequestParam(value = "status") PostStatusEnum status,
+        @RequestParam(value = "category") PostCategoryEnum category,
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "size", defaultValue = "0") Integer size,
+        @RequestParam(value = "direction", defaultValue = "asc") String direction
+    ) {
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+        return ResponseEntity.ok().body(service.findAllByStatusAndCategory(status, category, pageable));
+    }
+
+    @GetMapping(
         value = "/{id}",
         produces = {
             MediaTypes.APPLICATION_JSON,
