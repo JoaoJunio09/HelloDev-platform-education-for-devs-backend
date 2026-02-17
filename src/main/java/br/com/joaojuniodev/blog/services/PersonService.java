@@ -66,7 +66,7 @@ public class PersonService implements IService<PersonDTO> {
         logger.info("Updating a exists Person");
 
         var entity = repository.findById(person.getId())
-                .orElseThrow(() -> new NotFoundException("Not found this ID:" + person.getId()));
+            .orElseThrow(() -> new NotFoundException("Not found this ID:" + person.getId()));
         entity.setFirstName(person.getFirstName());
         entity.setLastName(person.getLastName());
         entity.setBirthDate(LocalDate.parse(person.getBirthDate()));

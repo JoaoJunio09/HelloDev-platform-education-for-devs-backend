@@ -5,6 +5,7 @@ import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mediatype.MediaTypes;
+import br.com.joaojuniodev.blog.model.enums.PostCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
 import br.com.joaojuniodev.blog.services.PostService;
@@ -65,22 +66,39 @@ public class PostController implements PostControllerDocs {
     }
 
     @GetMapping(
-        value = "/by" +
-                "",
+        value = "/by-status",
         produces = {
             MediaTypes.APPLICATION_JSON,
             MediaTypes.APPLICATION_XML,
             MediaTypes.APPLICATION_YAML })
     @Override
     public ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAllByStatus(
-            @RequestParam PostStatusEnum status,
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "0") Integer size,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction
+        @RequestParam(value = "status") PostStatusEnum status,
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "size", defaultValue = "0") Integer size,
+        @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
         return ResponseEntity.ok().body(service.findAllByStatus(status, pageable));
+    }
+
+    @GetMapping(
+        value = "/by-category",
+        produces = {
+            MediaTypes.APPLICATION_JSON,
+            MediaTypes.APPLICATION_XML,
+            MediaTypes.APPLICATION_YAML })
+    @Override
+    public ResponseEntity<PagedModel<EntityModel<PostDTO>>> findAllByCategory(
+        @RequestParam(value = "category") PostCategoryEnum category,
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "size", defaultValue = "0") Integer size,
+        @RequestParam(value = "direction", defaultValue = "asc") String direction
+    ) {
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+        return ResponseEntity.ok().body(service.findAllByCategory(category, pageable));
     }
 
     @GetMapping(
