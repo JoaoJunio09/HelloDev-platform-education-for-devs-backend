@@ -16,16 +16,13 @@ import br.com.joaojuniodev.blog.model.Post;
 import br.com.joaojuniodev.blog.model.enums.PostCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostImageCategoryEnum;
 import br.com.joaojuniodev.blog.model.enums.PostStatusEnum;
-import br.com.joaojuniodev.blog.repositories.CommentRepository;
 import br.com.joaojuniodev.blog.repositories.ImageFromPostRepository;
 import br.com.joaojuniodev.blog.repositories.PostRepository;
-import br.com.joaojuniodev.blog.repositories.UserRepository;
 import br.com.joaojuniodev.blog.services.contract.IService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,12 +31,11 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.swing.text.html.parser.Entity;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -79,6 +75,7 @@ public class PostService implements IService<PostDTO> {
         return buildPagedModel(pageable, posts);
     }
 
+    @PreAuthorize("permitAll()")
     @Override
     public List<PostDTO> findAll() {
 
@@ -90,6 +87,7 @@ public class PostService implements IService<PostDTO> {
             .toList();
     }
 
+    @PreAuthorize("permitAll()")
     public PagedModel<EntityModel<PostDTO>> findAllByStatus(PostStatusEnum status, Pageable pageable) {
 
         logger.info("Finding All Post's by Status");
@@ -98,6 +96,7 @@ public class PostService implements IService<PostDTO> {
         return buildPagedModel(pageable, posts);
     }
 
+    @PreAuthorize("permitAll()")
     public PagedModel<EntityModel<PostDTO>> findAllByCategory(PostCategoryEnum category, Pageable pageable) {
 
         logger.info("Finding All Post's by Category");
@@ -106,6 +105,7 @@ public class PostService implements IService<PostDTO> {
         return buildPagedModel(pageable, posts);
     }
 
+    @PreAuthorize("permitAll()")
     public  PagedModel<EntityModel<PostDTO>> findAllByStatusAndCategory(PostStatusEnum status, PostCategoryEnum category, Pageable pageable) {
 
         logger.info("Finding All Post's by Status and Category");
@@ -114,6 +114,7 @@ public class PostService implements IService<PostDTO> {
         return buildPagedModel(pageable, posts);
     }
 
+    @PreAuthorize("permitAll()")
     @Override
     public PostDTO findById(Long id) {
 
@@ -124,6 +125,7 @@ public class PostService implements IService<PostDTO> {
         return addHateoas(mapper.convertPostEntityToDto(entity));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Override
     public PostDTO create(PostDTO post) {
 
@@ -137,6 +139,7 @@ public class PostService implements IService<PostDTO> {
         return addHateoas(mapper.convertPostEntityToDto(entity));
     }
 
+    @PreAuthorize("permitAll()")
     public StoredFileResponse uploadImageFromPost(MultipartFile image, PostImageCategoryEnum category, Long postId) {
 
         logger.info("Uploading Image");
@@ -155,15 +158,7 @@ public class PostService implements IService<PostDTO> {
         return response;
     }
 
-    private String buildImageUrl(String fileId) {
-        if (fileId != null) {
-            final String BASE_URL = "http://localhost:8080";
-            return BASE_URL + "/api/posts/v1/getImageFromPost/" + fileId;
-        } else {
-            return null;
-        }
-    }
-
+    @PreAuthorize("permitAll()")
     public Resource getImageFromPost(String fileId) {
 
         logger.info("Getting Image from Post by fileId");
@@ -174,6 +169,7 @@ public class PostService implements IService<PostDTO> {
         return image;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Override
     public PostDTO update(PostDTO post) {
 
@@ -189,6 +185,7 @@ public class PostService implements IService<PostDTO> {
         return addHateoas(mapper.convertPostEntityToDto(repository.save(entity)));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Override
     public void delete(Long id) {
         logger.info("Deleting a one Post");
@@ -220,6 +217,15 @@ public class PostService implements IService<PostDTO> {
                 .withSelfRel();
 
         return assembler.toModel(postsWithLinks, findAllLink);
+    }
+
+    private String buildImageUrl(String fileId) {
+        if (fileId != null) {
+            final String BASE_URL = "http://localhost:8080";
+            return BASE_URL + "/api/posts/v1/getImageFromPost/" + fileId;
+        } else {
+            return null;
+        }
     }
 
     private PostDTO addHateoas(PostDTO dto) {

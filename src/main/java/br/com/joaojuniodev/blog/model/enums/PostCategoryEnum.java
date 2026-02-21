@@ -4,4 +4,5 @@ public enum PostCategoryEnum {
     BACKEND,
     FRONTEND,
     CAREER, // CARREIRA
+    ALL,
 }

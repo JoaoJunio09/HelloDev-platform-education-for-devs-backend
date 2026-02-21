@@ -21,6 +21,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -145,6 +146,7 @@ public class PostController implements PostControllerDocs {
         return ResponseEntity.ok().body(service.create(postDTO));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(
         value = "/uploadImageFromPost/{postId}",
         produces = {
