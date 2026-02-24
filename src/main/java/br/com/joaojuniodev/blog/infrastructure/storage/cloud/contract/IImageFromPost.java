@@ -8,4 +8,5 @@ public interface IImageFromPost {
 
     StoredFileResponse uploadImage(MultipartFile image);
     Resource getImage(String fileId);
+    void deleteImage(String fileId);
 }

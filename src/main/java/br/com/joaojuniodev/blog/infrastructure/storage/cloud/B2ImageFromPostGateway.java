@@ -3,6 +3,7 @@ package br.com.joaojuniodev.blog.infrastructure.storage.cloud;
 import br.com.joaojuniodev.blog.config.B2Properties;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
+import br.com.joaojuniodev.blog.exceptions.storage.DeletingImageInCloudException;
 import br.com.joaojuniodev.blog.exceptions.storage.ErrorReadingFilenameException;
 import br.com.joaojuniodev.blog.exceptions.storage.ErrorUploadingToB2Exception;
 import br.com.joaojuniodev.blog.exceptions.storage.ItWasNotPossibleToObtainImageInB2Exception;
@@ -81,6 +82,17 @@ public class B2ImageFromPostGateway implements IImageFromPost {
         }
         catch (Exception e) {
             throw new ItWasNotPossibleToObtainImageInB2Exception("An error occurred while trying to retrieve the image from b2.");
+        }
+    }
+
+    @Override
+    public void deleteImage(String fileId) {
+        try {
+            client.deleteFileVersion(getFileName(fileId), fileId);
+            logger.info("Deleting image from post in B2");
+        }
+        catch (Exception e) {
+            throw new DeletingImageInCloudException("It was not possible to delete the image from the B2 Cloud.");
         }
     }
 

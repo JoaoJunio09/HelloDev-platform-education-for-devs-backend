@@ -158,6 +158,28 @@ public class PostService implements IService<PostDTO> {
         return response;
     }
 
+    public StoredFileResponse updateImageFromPost(MultipartFile image, PostImageCategoryEnum category, String fileIdRemove, Long postId) {
+
+        logger.info("Updating Image And Upload");
+
+        if (image == null) throw new ErrorUploadingToB2Exception("The upload could not be completed because the image is null.");
+        if (!validityTypeOfContent(image)) throw new FileInvalidFormatException("No other file formats are accepted besides -> jpeg and png");
+
+        var post = repository.findById(postId)
+            .orElseThrow(() -> new NotFoundException("Not found this ID : " + postId));
+
+        b2ImageFromPostGateway.deleteImage(fileIdRemove);
+        imageFromPostRepository.deleteByPostId(post.getId());
+
+        StoredFileResponse response = b2ImageFromPostGateway.uploadImage(image);
+
+        logger.info("Saving image metadata in the database - Updating Image");
+        imageFromPostRepository.save(
+            new ImageFromPost(null, response.getFileId(), buildImageUrl(response.getFileId()), category, post)
+        );
+        return response;
+    }
+
     @PreAuthorize("permitAll()")
     public Resource getImageFromPost(String fileId) {
 
