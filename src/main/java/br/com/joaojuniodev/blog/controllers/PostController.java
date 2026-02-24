@@ -164,6 +164,24 @@ public class PostController implements PostControllerDocs {
         return ResponseEntity.ok().body(fileResponse);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(
+        value = "/updateImageFromPost/{fileIdRemove}/{postId}",
+        produces = {
+            MediaTypes.APPLICATION_JSON,
+            MediaTypes.APPLICATION_XML,
+            MediaTypes.APPLICATION_YAML })
+    public ResponseEntity<StoredFileResponse> updateImageFromPost(
+        @RequestParam("image") MultipartFile image,
+        @PathVariable("fileIdRemove") String fileIdRemove,
+        @PathVariable("postId") Long postId,
+        @RequestParam("category") PostImageCategoryEnum category
+    ) {
+        StoredFileResponse fileResponse = null;
+        if (image != null || !image.isEmpty()) fileResponse = service.updateImageFromPost(image, category, fileIdRemove, postId);
+        return ResponseEntity.ok().body(fileResponse);
+    }
+
     @GetMapping(
         value = "/getImageFromPost/{fileId}",
         produces = {
