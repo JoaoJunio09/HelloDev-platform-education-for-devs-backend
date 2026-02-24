@@ -165,7 +165,7 @@ public class PostController implements PostControllerDocs {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping(
+    @PutMapping(
         value = "/updateImageFromPost/{fileIdRemove}/{postId}",
         produces = {
             MediaTypes.APPLICATION_JSON,

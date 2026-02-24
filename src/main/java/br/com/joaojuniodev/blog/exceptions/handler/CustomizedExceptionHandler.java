@@ -124,4 +124,24 @@ public class CustomizedExceptionHandler {
         );
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DeletingImageInCloudException.class)
+    public ResponseEntity<ExceptionResponse> deletingImageB2ExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            ex.getMessage(),
+            request.getDescription(true),
+            new Date()
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(FileIdDoesNotMatchPostIdException.class)
+    public ResponseEntity<ExceptionResponse> fileIdDoesMatchB2ExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            ex.getMessage(),
+            request.getDescription(true),
+            new Date()
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }

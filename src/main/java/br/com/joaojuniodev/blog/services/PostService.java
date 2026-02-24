@@ -5,10 +5,7 @@ import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
-import br.com.joaojuniodev.blog.exceptions.storage.ErrorGettingFromB2Exception;
-import br.com.joaojuniodev.blog.exceptions.storage.ErrorUploadingToB2Exception;
-import br.com.joaojuniodev.blog.exceptions.storage.FileInvalidFormatException;
-import br.com.joaojuniodev.blog.exceptions.storage.InvalidFileIdException;
+import br.com.joaojuniodev.blog.exceptions.storage.*;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
 import br.com.joaojuniodev.blog.model.ImageFromPost;
@@ -165,19 +162,34 @@ public class PostService implements IService<PostDTO> {
         if (image == null) throw new ErrorUploadingToB2Exception("The upload could not be completed because the image is null.");
         if (!validityTypeOfContent(image)) throw new FileInvalidFormatException("No other file formats are accepted besides -> jpeg and png");
 
-        var post = repository.findById(postId)
-            .orElseThrow(() -> new NotFoundException("Not found this ID : " + postId));
-
-        b2ImageFromPostGateway.deleteImage(fileIdRemove);
-        imageFromPostRepository.deleteByPostId(post.getId());
+        deleteImageFromPost(fileIdRemove, postId);
 
         StoredFileResponse response = b2ImageFromPostGateway.uploadImage(image);
 
+        var post = repository.findById(postId)
+            .orElseThrow(() -> new NotFoundException("Not found this ID : " + postId));
         logger.info("Saving image metadata in the database - Updating Image");
         imageFromPostRepository.save(
             new ImageFromPost(null, response.getFileId(), buildImageUrl(response.getFileId()), category, post)
         );
         return response;
+    }
+
+    public Boolean fileBelongsToPost(String fileId, Long postId) {
+        // também preciso verificar se a categoria do banner corresponse a imagem do fileId;
+        return imageFromPostRepository.existsByFileIdAndPost_Id(fileId, postId);
+    }
+
+    public void deleteImageFromPost(String fileId, Long postId) {
+
+        logger.info("Deleting Image");
+
+        if (!fileBelongsToPost(fileId, postId)) {
+            throw new FileIdDoesNotMatchPostIdException("The file ID does not match the POST ID; please verify the POST ID.");
+        }
+
+        imageFromPostRepository.deleteByPostId(postId);
+        b2ImageFromPostGateway.deleteImage(fileId);
     }
 
     @PreAuthorize("permitAll()")

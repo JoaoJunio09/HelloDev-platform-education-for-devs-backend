@@ -20,8 +20,8 @@ public class ImageFromPost {
     @Column
     private PostImageCategoryEnum category;
 
-    @JoinColumn(name = "post_id")
     @ManyToOne
+    @JoinColumn(name = "post_id")
     private Post post;
 
     public ImageFromPost() {}
