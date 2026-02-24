@@ -15,23 +15,23 @@ public class PostDTO extends RepresentationModel<PostDTO> {
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String date;
-    private String bannerUrl;
-    private String thumbnailUrl;
+    private BannerDTO banner;
+    private ThumbnailDTO thumbnail;
     private String status;
     private String category;
     private UserDTO userDTO;
 
     public PostDTO() {}
 
-    public PostDTO(Long id, String title, String subTitle, String description, String content, String date, String bannerUrl, String thumbnailUrl, String status, String category, UserDTO userDTO) {
+    public PostDTO(Long id, String title, String subTitle, String description, String content, String date, BannerDTO banner, ThumbnailDTO thumbnail, String status, String category, UserDTO userDTO) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.description = description;
         this.content = content;
         this.date = date;
-        this.bannerUrl = bannerUrl;
-        this.thumbnailUrl = thumbnailUrl;
+        this.banner = banner;
+        this.thumbnail = thumbnail;
         this.status = status;
         this.category = category;
         this.userDTO = userDTO;
@@ -85,20 +85,20 @@ public class PostDTO extends RepresentationModel<PostDTO> {
         this.date = date;
     }
 
-    public String getBannerUrl() {
-        return bannerUrl;
+    public BannerDTO getBanner() {
+        return banner;
     }
 
-    public void setBannerUrl(String bannerUrl) {
-        this.bannerUrl = bannerUrl;
+    public void setBanner(BannerDTO banner) {
+        this.banner = banner;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    public ThumbnailDTO getThumbnail() {
+        return thumbnail;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setThumbnail(ThumbnailDTO thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public String getStatus() {

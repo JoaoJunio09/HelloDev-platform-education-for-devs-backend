@@ -188,7 +188,7 @@ public class PostService implements IService<PostDTO> {
             throw new FileIdDoesNotMatchPostIdException("The file ID does not match the POST ID; please verify the POST ID.");
         }
 
-        imageFromPostRepository.deleteByPostId(postId);
+        imageFromPostRepository.deleteByPostId(postId, fileId);
         b2ImageFromPostGateway.deleteImage(fileId);
     }
 

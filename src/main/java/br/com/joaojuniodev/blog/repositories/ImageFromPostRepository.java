@@ -16,8 +16,9 @@ public interface ImageFromPostRepository extends JpaRepository<ImageFromPost, Lo
     @Query("""
         DELETE FROM ImageFromPost i
         WHERE i.post.id = :postId
+        AND i.fileId = :fileId
     """)
-    void deleteByPostId(@Param("postId") Long postId);
+    void deleteByPostId(@Param("postId") Long postId, @Param("fileId") String fileId);
 
     boolean existsByFileIdAndPost_Id(@Param("fileId") String fileId, @Param("postId") Long postId);
 }

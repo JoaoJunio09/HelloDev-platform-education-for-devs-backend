@@ -11,6 +11,7 @@ import br.com.joaojuniodev.blog.repositories.PostRepository;
 import br.com.joaojuniodev.blog.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -78,32 +79,32 @@ public class ObjectConvertManually {
             entity.getDescription(),
             entity.getContent(),
             entity.getDate().toString(),
-            buildBannerUrl(entity.getImagesFromPosts(), entity.getId()),
-            buildThumbnailUrl(entity.getImagesFromPosts(), entity.getId()),
+            entity.getImagesFromPosts() == null ? new BannerDTO("", "") : buildBannerUrl(entity.getImagesFromPosts(), entity.getId()),
+            entity.getImagesFromPosts() == null ? new ThumbnailDTO("", "") : buildThumbnailUrl(entity.getImagesFromPosts(), entity.getId()),
             entity.getStatus() == null ? "" : entity.getStatus().toString(),
             entity.getCategory() == null ? "" : entity.getCategory().toString(),
             convertUserEntityToDto(entity.getUser())
         );
     }
 
-    private String buildBannerUrl(List<ImageFromPost> images, Long postId) {
-        if (images == null) return "";
+    private BannerDTO buildBannerUrl(List<ImageFromPost> images, Long postId) {
+        BannerDTO banner = null;
         for (ImageFromPost image : images) {
             if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategoryEnum.BANNER)) {
-                return image.getImageUrl();
+                banner = new BannerDTO(image.getImageUrl(), image.getFileId());
             }
         }
-        return "";
+        return banner;
     }
 
-    private String buildThumbnailUrl(List<ImageFromPost> images, Long postId) {
-        if (images == null) return "";
+    private ThumbnailDTO buildThumbnailUrl(List<ImageFromPost> images, Long postId) {
+        ThumbnailDTO thumbnail = null;
         for (ImageFromPost image : images) {
             if (image.getPost().getId().equals(postId) && image.getCategory().equals(PostImageCategoryEnum.THUMBNAIL)) {
-                return image.getImageUrl();
+                thumbnail = new ThumbnailDTO(image.getImageUrl(), image.getFileId());
             }
         }
-        return "";
+        return thumbnail;
     }
 
     private List<ImageFromPostDTO> convertImagesFromPostsListToDto(List<ImageFromPost> entities) {
