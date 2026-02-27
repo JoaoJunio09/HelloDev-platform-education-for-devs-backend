@@ -5,6 +5,7 @@ import br.com.joaojuniodev.blog.data.dto.model.PostDTO;
 import br.com.joaojuniodev.blog.data.dto.storage.StoredFileResponse;
 import br.com.joaojuniodev.blog.exceptions.NotFoundException;
 import br.com.joaojuniodev.blog.exceptions.ObjectIsNullException;
+import br.com.joaojuniodev.blog.exceptions.post.ParameterBySearchException;
 import br.com.joaojuniodev.blog.exceptions.storage.*;
 import br.com.joaojuniodev.blog.infrastructure.storage.cloud.B2ImageFromPostGateway;
 import br.com.joaojuniodev.blog.mapper.ObjectConvertManually;
@@ -155,6 +156,7 @@ public class PostService implements IService<PostDTO> {
         return response;
     }
 
+    @PreAuthorize("isAuthenticated()")
     public StoredFileResponse updateImageFromPost(MultipartFile image, PostImageCategoryEnum category, String fileIdRemove, Long postId) {
 
         logger.info("Updating Image And Upload");
@@ -175,9 +177,14 @@ public class PostService implements IService<PostDTO> {
         return response;
     }
 
-    public Boolean fileBelongsToPost(String fileId, Long postId) {
-        // também preciso verificar se a categoria do banner corresponse a imagem do fileId;
-        return imageFromPostRepository.existsByFileIdAndPost_Id(fileId, postId);
+    public PagedModel<EntityModel<PostDTO>> searchByTitle(String title, Pageable pageable) {
+
+        logger.info("Searching Post by Title");
+
+        if (title.isEmpty()) throw new ParameterBySearchException("The parameter [title] is empty.");
+
+        var posts = repository.searchByTitle(title, pageable);
+        return buildPagedModel(pageable, posts);
     }
 
     public void deleteImageFromPost(String fileId, Long postId) {
@@ -190,6 +197,11 @@ public class PostService implements IService<PostDTO> {
 
         imageFromPostRepository.deleteByPostId(postId, fileId);
         b2ImageFromPostGateway.deleteImage(fileId);
+    }
+
+    private Boolean fileBelongsToPost(String fileId, Long postId) {
+        // também preciso verificar se a categoria do banner corresponde a imagem do fileId;
+        return imageFromPostRepository.existsByFileIdAndPost_Id(fileId, postId);
     }
 
     @PreAuthorize("permitAll()")

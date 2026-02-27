@@ -1,6 +1,7 @@
 package br.com.joaojuniodev.blog.exceptions.handler;
 
 import br.com.joaojuniodev.blog.exceptions.*;
+import br.com.joaojuniodev.blog.exceptions.post.ParameterBySearchException;
 import br.com.joaojuniodev.blog.exceptions.storage.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -137,6 +138,16 @@ public class CustomizedExceptionHandler {
 
     @ExceptionHandler(FileIdDoesNotMatchPostIdException.class)
     public ResponseEntity<ExceptionResponse> fileIdDoesMatchB2ExceptionHandler(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+            ex.getMessage(),
+            request.getDescription(true),
+            new Date()
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ParameterBySearchException.class)
+    public ResponseEntity<ExceptionResponse> parameterBySearchExceptionHandler(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
             ex.getMessage(),
             request.getDescription(true),

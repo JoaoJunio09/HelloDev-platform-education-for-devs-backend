@@ -50,4 +50,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         @Param("category") PostCategoryEnum category,
         Pageable pageable
     );
+
+    @Query("""
+        SELECT p FROM Post p
+        WHERE p.title LIKE CONCAT('%', :title, '%')
+    """)
+    Page<Post> searchByTitle(@Param("title") String title, Pageable pageable);
 }

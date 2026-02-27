@@ -206,6 +206,23 @@ public class PostController implements PostControllerDocs {
             .body(image);
     }
 
+    @GetMapping(
+        value = "/search",
+        produces = {
+            MediaTypes.APPLICATION_JSON,
+            MediaTypes.APPLICATION_XML,
+            MediaTypes.APPLICATION_YAML })
+    public ResponseEntity<PagedModel<EntityModel<PostDTO>>> searchByTitle(
+        @RequestParam(value = "title") String title,
+        @RequestParam(value = "page", defaultValue = "0") Integer page,
+        @RequestParam(value = "size", defaultValue = "4") Integer size,
+        @RequestParam(value = "direction", defaultValue = "asc") String direction
+    ) {
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
+        return ResponseEntity.ok().body(service.searchByTitle(title, pageable));
+    }
+
     @PutMapping(
         consumes = {
             MediaTypes.APPLICATION_JSON,
