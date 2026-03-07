@@ -104,7 +104,7 @@ public class PostService implements IService<PostDTO> {
     }
 
     @PreAuthorize("permitAll()")
-    public  PagedModel<EntityModel<PostDTO>> findAllByStatusAndCategory(PostStatusEnum status, PostCategoryEnum category, Pageable pageable) {
+    public PagedModel<EntityModel<PostDTO>> findAllByStatusAndCategory(PostStatusEnum status, PostCategoryEnum category, Pageable pageable) {
 
         logger.info("Finding All Post's by Status and Category");
 
@@ -177,6 +177,7 @@ public class PostService implements IService<PostDTO> {
         return response;
     }
 
+    @PreAuthorize("isAuthenticated()")
     public PagedModel<EntityModel<PostDTO>> searchByTitle(String title, Pageable pageable) {
 
         logger.info("Searching Post by Title");
